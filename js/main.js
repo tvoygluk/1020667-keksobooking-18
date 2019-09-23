@@ -85,7 +85,7 @@ var makeMocks = function () { // make mocks
   for (var i = 0; i < MOCKS_LENGTH; i++) {
     var mockObj = {
       'author': {
-        avatar: 'img/avatars/user' + addZeroBeforeNum(i + 1, 2) + '.png'
+        'avatar': 'img/avatars/user' + addZeroBeforeNum(i + 1, 2) + '.png'
       },
 
       'offer': {
@@ -104,8 +104,8 @@ var makeMocks = function () { // make mocks
       },
 
       'location': {
-        'x': randomInteger(100, 200),
-        'y': randomInteger(130, 630)
+        'x': String(randomInteger(100, 200)),
+        'y': String(randomInteger(130, 630))
       }
     };
 
@@ -116,7 +116,7 @@ var makeMocks = function () { // make mocks
 };
 
 // eslint-disable-next-line no-console
-// console.log(makeMocks());
+console.log(makeMocks());
 
 /*
 var renderWizard = function (wizard) {
@@ -148,17 +148,27 @@ var pins = makeMocks();
 var renderPin = function (pin) {
   var pinElement = pinTemplate.cloneNode(true);
   pinElement.querySelector('.map__pin img').src = pin.author.avatar;
-  // pinElement.querySelector('.map__pin').style = 'left: ' + pin.location.x + 'px; top: ' + pin.location.y + 'px;';
-  // 'left: {{location.x}}px; top: {{location.y}}px;';
+  pinElement.style = 'left: ' + pin.location.x + 'px; top: ' + pin.location.y + 'px;';
   return pinElement;
 };
 
-var fragment = document.createDocumentFragment();
-for (var i = 0; i < pins.length; i++) {
-  fragment.appendChild(renderPin(pins[i]));
-}
+var addFragmentToLayout = function (mocks, addedBlock, renderFun) {
+  var fragment = document.createDocumentFragment();
 
-similarListElement.appendChild(fragment);
+  for (var i = 0; i < mocks.length; i++) {
+    fragment.appendChild(renderFun(mocks[i]));
+  }
+  addedBlock.appendChild(fragment);
+};
+
+addFragmentToLayout(pins, similarListElement, renderPin);
+
+// var fragment = document.createDocumentFragment();
+// for (var i = 0; i < pins.length; i++) {
+//   fragment.appendChild(renderPin(pins[i]));
+// }
+
+// similarListElement.appendChild(fragment);
 
 /**
 
