@@ -28,49 +28,64 @@
 
 'use strict';
 
-var makeMocks = function () {
+var CHECKIN_ARRAY = ['12:00', '13:00', '14:00'];
+var CHECKOUT_ARRAY = ['12:00', '13:00', '14:00'];
+var APARTMENT_TYPE_ARRAY = ['palace', 'flat', 'house', 'bungalo'];
+var FEATURES_ARRAY = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var PHOTO_ADDRESS_ARRAY = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+
+var addZeroBeforeNum = function (num, size) {
+  var string = String(num);
+  while (string.length < size) {
+    string = '0' + string;
+  }
+  return string;
+};
+
+var getRandomArrayElement = function (someArray) {
+  return someArray[Math.floor(Math.random() * someArray.length)];
+};
+
+var shuffleArray = function (array) {
+  var newLength = array.length;
+  var buffer;
+  var currentRandomLength;
+
+  while (newLength) {
+    currentRandomLength = Math.floor(Math.random() * newLength--);
+    buffer = array[newLength];
+    array[newLength] = array[currentRandomLength];
+    array[currentRandomLength] = buffer;
+  }
+
+  return array;
+};
+
+var makeArrayRandomShorterSize = function (str) {
+  var array = str.split(', ');
+  array = str.split(', ', Math.floor(Math.random() * array.length));
+
+  return array;
+};
+
+var makeNewShorterShuffleArray = function (array) {
+  return makeArrayRandomShorterSize(shuffleArray(array).join(', '));
+};
+
+var randomInteger = function (min, max) {
+  var rand = min + Math.random() * (max + 1 - min);
+
+  return Math.floor(rand);
+};
+
+var makeMocks = function () { // make mocks
   var MOCKS_LENGTH = 8;
-  var CHECKIN_ARRAY = ['12:00', '13:00', '14:00'];
-  var CHECKOUT_ARRAY = ['12:00', '13:00', '14:00'];
-  var APARTMENT_TYPE_ARRAY = ['palace', 'flat', 'house', 'bungalo'];
-  var FEATURES_ARRAY = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-  var PHOTO_ADDRESS_ARRAY = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
   var mocksArray = [];
-
-  var getRandomArrayElement = function (someArray) {
-    return someArray[Math.floor(Math.random() * someArray.length)];
-  };
-
-  var shakeArray = function (array) {
-    var newLength = array.length;
-    var buffer;
-    var currentRandomLength;
-
-    while (newLength) {
-      currentRandomLength = Math.floor(Math.random() * newLength--);
-      buffer = array[newLength];
-      array[newLength] = array[currentRandomLength];
-      array[currentRandomLength] = buffer;
-    }
-
-    return array;
-  };
-
-  var makeArrayRandomShorter = function (str) {
-    var array = str.split(', ');
-    array = str.split(', ', Math.floor(Math.random() * array.length));
-
-    return array;
-  };
-
-  var makeNewShorterShakeArray = function (array) {
-    return makeArrayRandomShorter(shakeArray(array).join(', '));
-  };
 
   for (var i = 0; i < MOCKS_LENGTH; i++) {
     var mockObj = {
       'author': {
-        avatar: 'img/avatars/user0' + (i + 1) + '.png'
+        avatar: 'img/avatars/user' + addZeroBeforeNum(i + 1, 2) + '.png'
       },
 
       'offer': {
@@ -82,15 +97,15 @@ var makeMocks = function () {
         'guests': 0,
         'checkin': getRandomArrayElement(CHECKIN_ARRAY),
         'checkout': getRandomArrayElement(CHECKOUT_ARRAY),
-        'features': makeNewShorterShakeArray(FEATURES_ARRAY),
+        'features': makeNewShorterShuffleArray(FEATURES_ARRAY),
         'description': '',
-        'photos': makeNewShorterShakeArray(PHOTO_ADDRESS_ARRAY)
+        'photos': makeNewShorterShuffleArray(PHOTO_ADDRESS_ARRAY)
 
       },
 
       'location': {
-        'x': 'случайное число, координата x метки на карте. Значение ограничено размерами блока, в котором перетаскивается метка.',
-        'y': 'случайное число, координата y метки на карте от 130 до 630'
+        'x': randomInteger(100, 200),
+        'y': randomInteger(130, 630)
       }
     };
 
@@ -101,4 +116,110 @@ var makeMocks = function () {
 };
 
 // eslint-disable-next-line no-console
-console.log(makeMocks());
+// console.log(makeMocks());
+
+/*
+var renderWizard = function (wizard) {
+  var wizardElement = similarWizardTemplate.cloneNode(true);
+
+  wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
+  wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
+  wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+
+  return wizardElement;
+};
+
+var fragment = document.createDocumentFragment();
+for (var i = 0; i < wizards.length; i++) {
+  fragment.appendChild(renderWizard(wizards[i]));
+}
+similarListElement.appendChild(fragment);
+*/
+
+var map = document.querySelector('.map');
+map.classList.remove('map--faded');
+
+var similarListElement = map.querySelector('.map__pins');
+
+var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+
+var pins = makeMocks();
+
+var renderPin = function (pin) {
+  var pinElement = pinTemplate.cloneNode(true);
+  pinElement.querySelector('.map__pin img').src = pin.author.avatar;
+  // pinElement.querySelector('.map__pin').style = 'left: ' + pin.location.x + 'px; top: ' + pin.location.y + 'px;';
+  // 'left: {{location.x}}px; top: {{location.y}}px;';
+  return pinElement;
+};
+
+var fragment = document.createDocumentFragment();
+for (var i = 0; i < pins.length; i++) {
+  fragment.appendChild(renderPin(pins[i]));
+}
+
+similarListElement.appendChild(fragment);
+
+/**
+
+  var WIZARD_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
+  var WIZARD_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
+  var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
+  var EYES_COLOR = ['black', 'red', 'blue', 'yellow', 'green'];
+
+  var getRandomArrayElement = function (someArray) {
+    return someArray[Math.floor(Math.random() * someArray.length)];
+  };
+
+  var makeFullName = function (name, surname) {
+    return name + ' ' + surname;
+  };
+
+  var userDialog = document.querySelector('.setup');
+  userDialog.classList.remove('hidden');
+
+  var similarListElement = userDialog.querySelector('.setup-similar-list');
+
+  var similarWizardTemplate = document.querySelector('#similar-wizard-template')
+      .content
+      .querySelector('.setup-similar-item');
+
+
+  var makeMocks = function () {
+  var MOCKS_LENGTH = 4;
+  var mocksArray = [];
+
+  for (var i = 0; i < MOCKS_LENGTH; i++) {
+    var mockObj = {
+      name: makeFullName(getRandomArrayElement(WIZARD_NAMES), getRandomArrayElement(WIZARD_SURNAMES)),
+      coatColor: getRandomArrayElement(COAT_COLORS),
+      eyesColor: getRandomArrayElement(EYES_COLOR)
+    };
+
+    mocksArray.push(mockObj);
+  }
+
+  return mocksArray;
+};
+
+var wizards = makeMocks();
+
+var renderWizard = function (wizard) {
+  var wizardElement = similarWizardTemplate.cloneNode(true);
+
+  wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
+  wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
+  wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+
+  return wizardElement;
+};
+
+var fragment = document.createDocumentFragment();
+for (var i = 0; i < wizards.length; i++) {
+  fragment.appendChild(renderWizard(wizards[i]));
+}
+similarListElement.appendChild(fragment);
+
+userDialog.querySelector('.setup-similar').classList.remove('hidden');
+
+ */
