@@ -1,31 +1,3 @@
-/*
- {
-  'author': {
-    'avatar': строка, адрес изображения вида img/avatars/user{{xx}}.png,
-    где {{xx}} это число от 1 до 8 с ведущим нулём. Например, 01, 02 и т. д. Адреса изображений не повторяются
-  },
-
-  'offer': {
-    'title': строка, заголовок предложения
-    'address': строка, адрес предложения. Для простоты пусть пока представляет собой запись вида '{{location.x}}, {{location.y}}', например, '600, 350'
-    'price': число, стоимость
-    'type': строка с одним из четырёх фиксированных значений: palace, flat, house или bungalo
-    'rooms': число, количество комнат
-    'guests': число, количество гостей, которое можно разместить
-    'checkin': строка с одним из трёх фиксированных значений: 12:00, 13:00 или 14:00,
-    'checkout': строка с одним из трёх фиксированных значений: 12:00, 13:00 или 14:00
-    'features': массив строк случайной длины из ниже предложенных: 'wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner',
-    'description': строка с описанием,
-    'photos': массив строк случайной длины, содержащий адреса фотографий 'http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-  },
-
-  'location': {
-    'x': случайное число, координата x метки на карте. Значение ограничено размерами блока, в котором перетаскивается метка.
-    'y': случайное число, координата y метки на карте от 130 до 630.
-  }
-}
- */
-
 'use strict';
 
 var CHECKIN_ARRAY = ['12:00', '13:00', '14:00'];
@@ -78,7 +50,27 @@ var randomInteger = function (min, max) {
   return Math.floor(rand);
 };
 
-var makeMocks = function () { // make mocks
+var TOP_LIMIT_POSITION_PIN = 130;
+var BOTTOM_LIMIT_POSITION_PIN = 630;
+var PIN_HEIGHT = document.querySelector('.map__pin').offsetHeight;
+
+var realRandomElementVerticalPosition = function (topBorder, bottomBorder, sizeElement) {
+  var realYPosition = randomInteger(topBorder, bottomBorder) - sizeElement;
+
+  return realYPosition > 0 ? realYPosition : sizeElement;
+};
+
+var PIN_PARENT_WIDTH = document.querySelector('.map__pin').parentNode.offsetWidth;
+var PIN_WIDTH = 50;
+
+var realRandomElementHorisontalPosition = function (widthParent, widthChild) {
+  var halfWidthChild = widthChild / 2;
+  var realXPosition = randomInteger(halfWidthChild, widthParent - halfWidthChild) - halfWidthChild;
+
+  return realXPosition;
+};
+
+var makeMocks = function () {
   var MOCKS_LENGTH = 8;
   var mocksArray = [];
 
@@ -104,8 +96,8 @@ var makeMocks = function () { // make mocks
       },
 
       'location': {
-        'x': String(randomInteger(100, 200)),
-        'y': String(randomInteger(130, 630))
+        'x': String(realRandomElementHorisontalPosition(PIN_PARENT_WIDTH, PIN_WIDTH)),
+        'y': String(realRandomElementVerticalPosition(TOP_LIMIT_POSITION_PIN, BOTTOM_LIMIT_POSITION_PIN, PIN_HEIGHT))
       }
     };
 
@@ -114,27 +106,6 @@ var makeMocks = function () { // make mocks
 
   return mocksArray;
 };
-
-// eslint-disable-next-line no-console
-console.log(makeMocks());
-
-/*
-var renderWizard = function (wizard) {
-  var wizardElement = similarWizardTemplate.cloneNode(true);
-
-  wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-  wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
-  wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
-
-  return wizardElement;
-};
-
-var fragment = document.createDocumentFragment();
-for (var i = 0; i < wizards.length; i++) {
-  fragment.appendChild(renderWizard(wizards[i]));
-}
-similarListElement.appendChild(fragment);
-*/
 
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
@@ -147,8 +118,9 @@ var pins = makeMocks();
 
 var renderPin = function (pin) {
   var pinElement = pinTemplate.cloneNode(true);
-  pinElement.querySelector('.map__pin img').src = pin.author.avatar;
   pinElement.style = 'left: ' + pin.location.x + 'px; top: ' + pin.location.y + 'px;';
+  pinElement.querySelector('.map__pin img').src = pin.author.avatar;
+  pinElement.querySelector('.map__pin img').alt = '{{заголовок объявления}}';
   return pinElement;
 };
 
@@ -162,74 +134,3 @@ var addFragmentToLayout = function (mocks, addedBlock, renderFun) {
 };
 
 addFragmentToLayout(pins, similarListElement, renderPin);
-
-// var fragment = document.createDocumentFragment();
-// for (var i = 0; i < pins.length; i++) {
-//   fragment.appendChild(renderPin(pins[i]));
-// }
-
-// similarListElement.appendChild(fragment);
-
-/**
-
-  var WIZARD_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-  var WIZARD_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-  var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
-  var EYES_COLOR = ['black', 'red', 'blue', 'yellow', 'green'];
-
-  var getRandomArrayElement = function (someArray) {
-    return someArray[Math.floor(Math.random() * someArray.length)];
-  };
-
-  var makeFullName = function (name, surname) {
-    return name + ' ' + surname;
-  };
-
-  var userDialog = document.querySelector('.setup');
-  userDialog.classList.remove('hidden');
-
-  var similarListElement = userDialog.querySelector('.setup-similar-list');
-
-  var similarWizardTemplate = document.querySelector('#similar-wizard-template')
-      .content
-      .querySelector('.setup-similar-item');
-
-
-  var makeMocks = function () {
-  var MOCKS_LENGTH = 4;
-  var mocksArray = [];
-
-  for (var i = 0; i < MOCKS_LENGTH; i++) {
-    var mockObj = {
-      name: makeFullName(getRandomArrayElement(WIZARD_NAMES), getRandomArrayElement(WIZARD_SURNAMES)),
-      coatColor: getRandomArrayElement(COAT_COLORS),
-      eyesColor: getRandomArrayElement(EYES_COLOR)
-    };
-
-    mocksArray.push(mockObj);
-  }
-
-  return mocksArray;
-};
-
-var wizards = makeMocks();
-
-var renderWizard = function (wizard) {
-  var wizardElement = similarWizardTemplate.cloneNode(true);
-
-  wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-  wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
-  wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
-
-  return wizardElement;
-};
-
-var fragment = document.createDocumentFragment();
-for (var i = 0; i < wizards.length; i++) {
-  fragment.appendChild(renderWizard(wizards[i]));
-}
-similarListElement.appendChild(fragment);
-
-userDialog.querySelector('.setup-similar').classList.remove('hidden');
-
- */
