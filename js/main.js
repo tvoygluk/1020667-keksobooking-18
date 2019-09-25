@@ -5,14 +5,11 @@ var CHECKOUT_ARRAY = ['12:00', '13:00', '14:00'];
 var APARTMENT_TYPE_ARRAY = ['palace', 'flat', 'house', 'bungalo'];
 var FEATURES_ARRAY = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTO_ADDRESS_ARRAY = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-
-var addZeroBeforeNum = function (num, size) {
-  var string = String(num);
-  while (string.length < size) {
-    string = '0' + string;
-  }
-  return string;
-};
+var TOP_LIMIT_POSITION_PIN = 130;
+var BOTTOM_LIMIT_POSITION_PIN = 630;
+var PIN_PARENT_WIDTH = document.querySelector('.map__pin').parentNode.offsetWidth;
+var PIN_HEIGHT = 70;
+var PIN_WIDTH = 50;
 
 var getRandomArrayElement = function (someArray) {
   return someArray[Math.floor(Math.random() * someArray.length)];
@@ -50,26 +47,6 @@ var randomInteger = function (min, max) {
   return Math.floor(rand);
 };
 
-var TOP_LIMIT_POSITION_PIN = 130;
-var BOTTOM_LIMIT_POSITION_PIN = 630;
-var PIN_HEIGHT = document.querySelector('.map__pin').offsetHeight;
-
-var realRandomElementVerticalPosition = function (topBorder, bottomBorder, sizeElement) {
-  var realYPosition = randomInteger(topBorder, bottomBorder) - sizeElement;
-
-  return realYPosition > 0 ? realYPosition : sizeElement;
-};
-
-var PIN_PARENT_WIDTH = document.querySelector('.map__pin').parentNode.offsetWidth;
-var PIN_WIDTH = 50;
-
-var realRandomElementHorisontalPosition = function (widthParent, widthChild) {
-  var halfWidthChild = widthChild / 2;
-  var realXPosition = randomInteger(halfWidthChild, widthParent - halfWidthChild) - halfWidthChild;
-
-  return realXPosition;
-};
-
 var makeMocks = function () {
   var MOCKS_LENGTH = 8;
   var mocksArray = [];
@@ -77,7 +54,7 @@ var makeMocks = function () {
   for (var i = 0; i < MOCKS_LENGTH; i++) {
     var mockObj = {
       'author': {
-        'avatar': 'img/avatars/user' + addZeroBeforeNum(i + 1, 2) + '.png'
+        'avatar': 'img/avatars/user0' + (i + 1) + '.png'
       },
 
       'offer': {
@@ -96,8 +73,8 @@ var makeMocks = function () {
       },
 
       'location': {
-        'x': String(realRandomElementHorisontalPosition(PIN_PARENT_WIDTH, PIN_WIDTH)),
-        'y': String(realRandomElementVerticalPosition(TOP_LIMIT_POSITION_PIN, BOTTOM_LIMIT_POSITION_PIN, PIN_HEIGHT))
+        'x': randomInteger(1, PIN_PARENT_WIDTH),
+        'y': randomInteger(TOP_LIMIT_POSITION_PIN, BOTTOM_LIMIT_POSITION_PIN)
       }
     };
 
@@ -118,9 +95,10 @@ var pins = makeMocks();
 
 var renderPin = function (pin) {
   var pinElement = pinTemplate.cloneNode(true);
-  pinElement.style = 'left: ' + pin.location.x + 'px; top: ' + pin.location.y + 'px;';
+  pinElement.style = 'left: ' + (pin.location.x - (PIN_WIDTH / 2)) + 'px; top: ' + (pin.location.y - PIN_HEIGHT) + 'px;';
   pinElement.querySelector('.map__pin img').src = pin.author.avatar;
   pinElement.querySelector('.map__pin img').alt = '{{заголовок объявления}}';
+  pinElement.tabIndex = 0;
   return pinElement;
 };
 
