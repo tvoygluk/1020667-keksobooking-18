@@ -58,16 +58,16 @@ var makeMocks = function () {
       },
 
       'offer': {
-        'title': '',
+        'title': '{{заголовок объявления}}',
         'address': '{{location.x}}, {{location.y}}',
-        'price': 0,
+        'price': '{{offer.price}}₽/ночь',
         'type': getRandomArrayElement(APARTMENT_TYPE_ARRAY),
-        'rooms': 0,
-        'guests': 0,
+        'rooms': '{{offer.rooms}}',
+        'guests': '{{offer.guests}}',
         'checkin': getRandomArrayElement(CHECKIN_ARRAY),
         'checkout': getRandomArrayElement(CHECKOUT_ARRAY),
         'features': makeNewShorterShuffleArray(FEATURES_ARRAY),
-        'description': '',
+        'description': '{{описание объекта недвижимости}}',
         'photos': makeNewShorterShuffleArray(PHOTO_ADDRESS_ARRAY)
 
       },
@@ -112,3 +112,37 @@ var addFragmentToLayout = function (mocks, addedBlock, renderFun) {
 };
 
 addFragmentToLayout(pins, similarListElement, renderPin);
+
+var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+
+var renserCard = function (pin) {
+  var cardElement = cardTemplate.cloneNode(true);
+  cardElement.querySelector('.popup__title').textContent = pin.offer.title;
+  cardElement.querySelector('.popup__text--address').textContent = pin.offer.address;
+  cardElement.querySelector('.popup__text--price').textContent = pin.offer.price;
+  switch (pin.offer.type) {
+    case 'palace':
+      cardElement.querySelector('.popup__type').textContent = 'Дворец';
+      break;
+    case 'flat':
+      cardElement.querySelector('.popup__type').textContent = 'Квартира';
+      break;
+    case 'house':
+      cardElement.querySelector('.popup__type').textContent = 'Дом';
+      break;
+    case 'bungalo':
+      cardElement.querySelector('.popup__type').textContent = 'Бунгало';
+      break;
+  }
+  cardElement.querySelector('.popup__text--capacity').textContent = pin.offer.rooms + ' комнаты для ' + pin.offer.guests;
+  cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout;
+  cardElement.querySelector('.popup__features').textContent = pin.offer.features.join(', ');
+  cardElement.querySelector('.popup__description').textContent = pin.offer.description;
+  cardElement.querySelector('.popup__photos img').src = pin.offer.photos[1] || 'http://o0.github.io/assets/images/tokyo/hotel2.jpg'; // заглушка
+  cardElement.querySelector('.popup__avatar').src = pin.author.avatar;
+
+  return cardElement;
+};
+
+var cardListElement = document.querySelector('.map');
+addFragmentToLayout(pins, cardListElement, renserCard);
