@@ -58,16 +58,16 @@ var makeMocks = function () {
       },
 
       'offer': {
-        'title': '{{заголовок объявления}}',
-        'address': '{{location.x}}, {{location.y}}',
-        'price': '{{offer.price}}₽/ночь',
+        'title': 'Уютное гнездышко для молодоженов',
+        'address': '600, 350',
+        'price': '5200₽/ночь',
         'type': getRandomArrayElement(APARTMENT_TYPE_ARRAY),
-        'rooms': '{{offer.rooms}}',
-        'guests': '{{offer.guests}}',
+        'rooms': '2',
+        'guests': '3',
         'checkin': getRandomArrayElement(CHECKIN_ARRAY),
         'checkout': getRandomArrayElement(CHECKOUT_ARRAY),
         'features': makeNewShorterShuffleArray(FEATURES_ARRAY),
-        'description': '{{описание объекта недвижимости}}',
+        'description': 'Великолепная квартира-студия в центре Токио. Подходит как туристам, так и бизнесменам. Квартира полностью укомплектована и недавно отремонтирована.',
         'photos': makeNewShorterShuffleArray(PHOTO_ADDRESS_ARRAY)
 
       },
@@ -134,11 +134,11 @@ var renserCard = function (pin) {
       cardElement.querySelector('.popup__type').textContent = 'Бунгало';
       break;
   }
-  cardElement.querySelector('.popup__text--capacity').textContent = pin.offer.rooms + ' комнаты для ' + pin.offer.guests;
+  cardElement.querySelector('.popup__text--capacity').textContent = pin.offer.rooms + ' комнаты для ' + pin.offer.guests + ' гостей';
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout;
-  cardElement.querySelector('.popup__features').textContent = pin.offer.features.join(', ');
+  // cardElement.querySelector('.popup__features').textContent = pin.offer.features.join(', ');
   cardElement.querySelector('.popup__description').textContent = pin.offer.description;
-  cardElement.querySelector('.popup__photos img').src = pin.offer.photos[1] || 'http://o0.github.io/assets/images/tokyo/hotel2.jpg'; // заглушка
+  // cardElement.querySelector('.popup__photos img').src = pin.offer.photos[1] || 'http://o0.github.io/assets/images/tokyo/hotel2.jpg'; // заглушка
   cardElement.querySelector('.popup__avatar').src = pin.author.avatar;
 
   return cardElement;
