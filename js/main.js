@@ -1,5 +1,5 @@
 'use strict';
-
+/*
 var CHECKIN_ARRAY = ['12:00', '13:00', '14:00'];
 var CHECKOUT_ARRAY = ['12:00', '13:00', '14:00'];
 var APARTMENT_TYPE_ARRAY = ['palace', 'flat', 'house', 'bungalo'];
@@ -166,3 +166,50 @@ var renserCard = function (pin) {
 
 var cardListElement = document.querySelector('.map');
 addFragmentToLayout(pins, cardListElement, renserCard);
+*/
+var adForm = document.querySelector('.ad-form');
+
+var makeDisabled = function (element) {
+  return element.setAttribute('disabled', 'disabled');
+};
+
+var adFormHeaderInput = adForm.querySelector('.ad-form-header__input');
+makeDisabled(adFormHeaderInput);
+
+var titleInput = document.getElementById('title');
+makeDisabled(titleInput);
+
+var addressInput = document.getElementById('address');
+makeDisabled(addressInput);
+
+var typeInput = document.getElementById('type');
+makeDisabled(typeInput);
+
+var priceInput = document.getElementById('price');
+makeDisabled(priceInput);
+
+var timeinInput = document.getElementById('timein');
+makeDisabled(timeinInput);
+
+var timeoutInput = document.getElementById('timeout');
+makeDisabled(timeoutInput);
+
+var roomNumberInput = document.getElementById('room_number');
+makeDisabled(roomNumberInput);
+
+var capacityInput = document.getElementById('capacity');
+makeDisabled(capacityInput);
+
+var featuresInput = adForm.querySelectorAll('input[name=features]');
+for (var i = 0; i < featuresInput.length; i++) {
+  makeDisabled(featuresInput[i]);
+}
+
+var descriptionInput = document.getElementById('description');
+makeDisabled(descriptionInput);
+
+var imagesInput = document.getElementById('images');
+makeDisabled(imagesInput);
+
+var adFormSubmitInput = adForm.querySelector('.ad-form__submit');
+makeDisabled(adFormSubmitInput);
