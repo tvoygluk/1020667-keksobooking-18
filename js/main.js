@@ -10,6 +10,20 @@ var BOTTOM_LIMIT_POSITION_PIN = 630;
 var PIN_PARENT_WIDTH = document.querySelector('.map__pin').parentNode.offsetWidth;
 var PIN_HEIGHT = 70;
 var PIN_WIDTH = 50;
+var TYPES = {
+  'palace': {
+    ru: 'Дворец'
+  },
+  'flat': {
+    ru: 'Квартира'
+  },
+  'house': {
+    ru: 'Дом'
+  },
+  'bungalo': {
+    ru: 'Бунгало'
+  }
+};
 
 var getRandomArrayElement = function (someArray) {
   return someArray[Math.floor(Math.random() * someArray.length)];
@@ -97,7 +111,7 @@ var renderPin = function (pin) {
   var pinElement = pinTemplate.cloneNode(true);
   pinElement.style = 'left: ' + (pin.location.x - (PIN_WIDTH / 2)) + 'px; top: ' + (pin.location.y - PIN_HEIGHT) + 'px;';
   pinElement.querySelector('.map__pin img').src = pin.author.avatar;
-  pinElement.querySelector('.map__pin img').alt = '{{заголовок объявления}}';
+  pinElement.querySelector('.map__pin img').alt = pin.offer.title;
   pinElement.tabIndex = 0;
   return pinElement;
 };
@@ -120,25 +134,31 @@ var renserCard = function (pin) {
   cardElement.querySelector('.popup__title').textContent = pin.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = pin.offer.address;
   cardElement.querySelector('.popup__text--price').textContent = pin.offer.price;
-  switch (pin.offer.type) {
-    case 'palace':
-      cardElement.querySelector('.popup__type').textContent = 'Дворец';
-      break;
-    case 'flat':
-      cardElement.querySelector('.popup__type').textContent = 'Квартира';
-      break;
-    case 'house':
-      cardElement.querySelector('.popup__type').textContent = 'Дом';
-      break;
-    case 'bungalo':
-      cardElement.querySelector('.popup__type').textContent = 'Бунгало';
-      break;
-  }
+  cardElement.querySelector('.popup__type').textContent = TYPES[pin.offer.type].ru;
   cardElement.querySelector('.popup__text--capacity').textContent = pin.offer.rooms + ' комнаты для ' + pin.offer.guests + ' гостей';
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout;
-  // cardElement.querySelector('.popup__features').textContent = pin.offer.features.join(', ');
+
+  var features = cardElement.querySelector('.popup__features');
+  features.innerHTML = '';
+  for (var i = 0; i < pin.offer.features.length; i++) {
+    var featuresElement = document.createElement('li');
+    featuresElement.className = ('popup__feature popup__feature--' + pin.offer.features[i]);
+    features.appendChild(featuresElement);
+  }
+
   cardElement.querySelector('.popup__description').textContent = pin.offer.description;
-  // cardElement.querySelector('.popup__photos img').src = pin.offer.photos[1] || 'http://o0.github.io/assets/images/tokyo/hotel2.jpg'; // заглушка
+  var popupPhotos = cardElement.querySelector('.popup__photos');
+  popupPhotos.innerHTML = '';
+  for (var j = 0; j < pin.offer.photos.length; j++) {
+    var photoElement = document.createElement('img');
+    photoElement.src = pin.offer.photos[j];
+    photoElement.className = ('popup__photo');
+    photoElement.width = 45;
+    photoElement.height = 40;
+    photoElement.alt = 'Фотография жилья';
+    popupPhotos.appendChild(photoElement);
+  }
+
   cardElement.querySelector('.popup__avatar').src = pin.author.avatar;
 
   return cardElement;
