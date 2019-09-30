@@ -213,3 +213,24 @@ makeDisabled(imagesInput);
 
 var adFormSubmitInput = adForm.querySelector('.ad-form__submit');
 makeDisabled(adFormSubmitInput);
+
+var makePageActive = function () {
+  var allInputsAdForm = adForm.querySelectorAll('input');
+  for (var k = 0; k < allInputsAdForm.length; k++) {
+    allInputsAdForm[k].disabled = false;
+  }
+
+  var allSelectsAdForm = adForm.querySelectorAll('select');
+  for (var j = 0; j < allSelectsAdForm.length; j++) {
+    allSelectsAdForm[j].disabled = false;
+  }
+
+  descriptionInput.disabled = false;
+
+  adFormSubmitInput.disabled = false;
+};
+
+var mapPinMain = document.querySelector('.map__pin--main');
+mapPinMain.addEventListener('mousedown', function () {
+  makePageActive();
+});
