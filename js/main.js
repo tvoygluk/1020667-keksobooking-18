@@ -23,8 +23,9 @@ var TYPES = {
   'bungalo': {
     ru: 'Бунгало'
   }
-};
-
+};*/
+var ENTER_KEYCODE = 13;
+/*
 var getRandomArrayElement = function (someArray) {
   return someArray[Math.floor(Math.random() * someArray.length)];
 };
@@ -169,68 +170,159 @@ addFragmentToLayout(pins, cardListElement, renserCard);
 */
 var adForm = document.querySelector('.ad-form');
 
-var makeDisabled = function (element) {
+var setDisabled = function (element) {
   return element.setAttribute('disabled', 'disabled');
 };
 
+var removeDisabled = function (element) {
+  return element.removeAttribute('disabled');
+};
+
 var adFormHeaderInput = adForm.querySelector('.ad-form-header__input');
-makeDisabled(adFormHeaderInput);
+setDisabled(adFormHeaderInput);
 
 var titleInput = document.getElementById('title');
-makeDisabled(titleInput);
+setDisabled(titleInput);
 
 var addressInput = document.getElementById('address');
-makeDisabled(addressInput);
+setDisabled(addressInput);
 
 var typeInput = document.getElementById('type');
-makeDisabled(typeInput);
+setDisabled(typeInput);
 
 var priceInput = document.getElementById('price');
-makeDisabled(priceInput);
+setDisabled(priceInput);
 
 var timeinInput = document.getElementById('timein');
-makeDisabled(timeinInput);
+setDisabled(timeinInput);
 
 var timeoutInput = document.getElementById('timeout');
-makeDisabled(timeoutInput);
+setDisabled(timeoutInput);
 
 var roomNumberInput = document.getElementById('room_number');
-makeDisabled(roomNumberInput);
+setDisabled(roomNumberInput);
 
 var capacityInput = document.getElementById('capacity');
-makeDisabled(capacityInput);
+setDisabled(capacityInput);
 
 var featuresInput = adForm.querySelectorAll('input[name=features]');
 for (var i = 0; i < featuresInput.length; i++) {
-  makeDisabled(featuresInput[i]);
+  setDisabled(featuresInput[i]);
 }
 
 var descriptionInput = document.getElementById('description');
-makeDisabled(descriptionInput);
+setDisabled(descriptionInput);
 
 var imagesInput = document.getElementById('images');
-makeDisabled(imagesInput);
+setDisabled(imagesInput);
 
 var adFormSubmitInput = adForm.querySelector('.ad-form__submit');
-makeDisabled(adFormSubmitInput);
+setDisabled(adFormSubmitInput);
 
 var makePageActive = function () {
   var allInputsAdForm = adForm.querySelectorAll('input');
   for (var k = 0; k < allInputsAdForm.length; k++) {
-    allInputsAdForm[k].disabled = false;
+    removeDisabled(allInputsAdForm[k]);
   }
 
   var allSelectsAdForm = adForm.querySelectorAll('select');
   for (var j = 0; j < allSelectsAdForm.length; j++) {
-    allSelectsAdForm[j].disabled = false;
+    removeDisabled(allSelectsAdForm[j]);
   }
 
-  descriptionInput.disabled = false;
+  removeDisabled(descriptionInput);
 
-  adFormSubmitInput.disabled = false;
+  removeDisabled(adFormSubmitInput);
+
+  addressInput.setAttribute('readonly', 'readonly');
 };
 
 var mapPinMain = document.querySelector('.map__pin--main');
+
+(function () {
+  var mapPinMainXCenter = (Number(mapPinMain.style.left.replace(/\D+/g, '')) + (mapPinMain.offsetWidth / 2));
+  var mapPinMainYCenter = (Number(mapPinMain.style.top.replace(/\D+/g, '')) + (mapPinMain.offsetHeight / 2));
+  addressInput.value = mapPinMainXCenter + ', ' + mapPinMainYCenter;
+})();
+
 mapPinMain.addEventListener('mousedown', function () {
   makePageActive();
+});
+
+mapPinMain.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    makePageActive();
+  }
+});
+
+var roomSelect1 = roomNumberInput.querySelector('option:nth-of-type(1)');
+var roomSelect2 = roomNumberInput.querySelector('option:nth-of-type(2)');
+var roomSelect3 = roomNumberInput.querySelector('option:nth-of-type(3)');
+var roomSelect100 = roomNumberInput.querySelector('option:nth-of-type(4)');
+var capacitySelect1 = capacityInput.querySelector('option:nth-of-type(1)');
+var capacitySelect2 = capacityInput.querySelector('option:nth-of-type(2)');
+var capacitySelect3 = capacityInput.querySelector('option:nth-of-type(3)');
+var capacitySelect0 = capacityInput.querySelector('option:nth-of-type(4)');
+
+var removeAllDisabled = function () {
+  removeDisabled(roomSelect1);
+  removeDisabled(roomSelect2);
+  removeDisabled(roomSelect3);
+  removeDisabled(roomSelect100);
+  removeDisabled(capacitySelect1);
+  removeDisabled(capacitySelect2);
+  removeDisabled(capacitySelect3);
+  removeDisabled(capacitySelect0);
+};
+
+var changeRooms = function () {
+  if (roomNumberInput.value === '1') {
+    capacitySelect1.selected = true;
+    setDisabled(capacitySelect2);
+    setDisabled(capacitySelect3);
+    setDisabled(capacitySelect0);
+  } else if (roomNumberInput.value === '2') {
+    capacitySelect1.selected = true;
+    setDisabled(capacitySelect3);
+    setDisabled(capacitySelect0);
+  } else if (roomNumberInput.value === '3') {
+    capacitySelect1.selected = true;
+    setDisabled(capacitySelect0);
+  } else if (roomNumberInput.value === '100') {
+    capacitySelect0.selected = true;
+    setDisabled(capacitySelect1);
+    setDisabled(capacitySelect2);
+    setDisabled(capacitySelect3);
+  }
+};
+
+var changeGuests = function () {
+  if (capacityInput.value === '1') {
+    roomSelect1.selected = true;
+    setDisabled(roomSelect100);
+  } else if (capacityInput.value === '2') {
+    roomSelect2.selected = true;
+    setDisabled(roomSelect1);
+    setDisabled(roomSelect100);
+  } else if (capacityInput.value === '3') {
+    roomSelect3.selected = true;
+    setDisabled(roomSelect1);
+    setDisabled(roomSelect2);
+    setDisabled(roomSelect100);
+  } else if (capacityInput.value === '0') {
+    roomSelect100.selected = true;
+    setDisabled(roomSelect1);
+    setDisabled(roomSelect2);
+    setDisabled(roomSelect3);
+  }
+};
+
+roomNumberInput.addEventListener('change', function () {
+  removeAllDisabled();
+  changeRooms();
+});
+
+capacityInput.addEventListener('change', function () {
+  removeAllDisabled();
+  changeGuests();
 });
