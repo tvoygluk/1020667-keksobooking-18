@@ -11,6 +11,7 @@ var BOTTOM_LIMIT_POSITION_PIN = 630;
 var PIN_PARENT_WIDTH = document.querySelector('.map__pin').parentNode.offsetWidth;
 var PIN_HEIGHT = 70;
 var PIN_WIDTH = 50;
+var MAIN_PIN_EXTRA_HEIGHT = 15;
 var ENTER_KEYCODE = 13;
 var TYPES = {
   'palace': {
@@ -25,6 +26,12 @@ var TYPES = {
   'bungalo': {
     ru: 'Бунгало'
   }
+};
+var ROOMS_CAPACITY = {
+  '1': ['1'],
+  '2': ['1', '2'],
+  '3': ['1', '2', '3'],
+  '100': ['0']
 };
 
 // Создание моковых данных для пинов
@@ -165,8 +172,25 @@ var renderCard = function (pin) {
   return cardElement;
 };
 
-// Активация страницы
+// Валидация формы
 var adForm = document.querySelector('.ad-form');
+var roomNumberSelect = adForm.querySelector('#room_number');
+var capacitySelect = adForm.querySelector('#capacity');
+
+var onRoomNumberSelectChange = function () {
+  if (capacitySelect.options.length > 0) {
+    [].forEach.call(capacitySelect.options, function (item) {
+      item.classList.remove('visually-hidden');
+      item.selected = (ROOMS_CAPACITY[roomNumberSelect.value][0] === item.value);
+      item.hidden = !(ROOMS_CAPACITY[roomNumberSelect.value].indexOf(item.value) >= 0);
+    });
+  }
+};
+
+roomNumberSelect.addEventListener('change', onRoomNumberSelectChange);
+
+
+// Активация страницы
 var fieldsets = adForm.querySelectorAll('fieldset');
 var mapPinMain = document.querySelector('.map__pin--main');
 var addressField = adForm.querySelector('#address');
@@ -179,7 +203,7 @@ var toggleDisabled = function () {
 toggleDisabled();
 
 var setAddressValue = function () {
-  addressField.value = (map.classList.contains('map--faded')) ? Math.floor(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2) + ', ' + Math.floor(parseInt(mapPinMain.style.top, 10) + mapPinMain.offsetHeight / 2) : 123;
+  addressField.value = (map.classList.contains('map--faded')) ? Math.floor(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2) + ', ' + Math.floor(parseInt(mapPinMain.style.top, 10) + mapPinMain.offsetHeight / 2) : Math.floor(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2) + ', ' + Math.floor(parseInt(mapPinMain.style.top, 10) + mapPinMain.offsetHeight + MAIN_PIN_EXTRA_HEIGHT);
 };
 
 setAddressValue();
@@ -191,6 +215,7 @@ var makePageActive = function () {
   addFragmentToLayout();
   map.appendChild(renderCard(pins[0]));
   setAddressValue();
+  onRoomNumberSelectChange();
 };
 
 var onMainPinMouseDown = function () {
@@ -205,83 +230,3 @@ var onMainPinKeyDown = function (evt) {
 mapPinMain.addEventListener('mousedown', onMainPinMouseDown);
 mapPinMain.addEventListener('keydown', onMainPinKeyDown);
 
-// Валидация формы
-
-// (function () {
-//   var mapPinMainXCenter = (Number(mapPinMain.style.left.replace(/\D+/g, '')) + (mapPinMain.offsetWidth / 2));
-//   var mapPinMainYCenter = (Number(mapPinMain.style.top.replace(/\D+/g, '')) + (mapPinMain.offsetHeight / 2));
-//   addressInput.value = mapPinMainXCenter + ', ' + mapPinMainYCenter;
-// })();
-
-
-// var roomSelect1 = roomNumberInput.querySelector('option:nth-of-type(1)');
-// var roomSelect2 = roomNumberInput.querySelector('option:nth-of-type(2)');
-// var roomSelect3 = roomNumberInput.querySelector('option:nth-of-type(3)');
-// var roomSelect100 = roomNumberInput.querySelector('option:nth-of-type(4)');
-// var capacitySelect1 = capacityInput.querySelector('option:nth-of-type(1)');
-// var capacitySelect2 = capacityInput.querySelector('option:nth-of-type(2)');
-// var capacitySelect3 = capacityInput.querySelector('option:nth-of-type(3)');
-// var capacitySelect0 = capacityInput.querySelector('option:nth-of-type(4)');
-
-// var removeAllDisabled = function () {
-//   removeDisabled(roomSelect1);
-//   removeDisabled(roomSelect2);
-//   removeDisabled(roomSelect3);
-//   removeDisabled(roomSelect100);
-//   removeDisabled(capacitySelect1);
-//   removeDisabled(capacitySelect2);
-//   removeDisabled(capacitySelect3);
-//   removeDisabled(capacitySelect0);
-// };
-
-// var changeRooms = function () {
-//   if (roomNumberInput.value === '1') {
-//     capacitySelect1.selected = true;
-//     setDisabled(capacitySelect2);
-//     setDisabled(capacitySelect3);
-//     setDisabled(capacitySelect0);
-//   } else if (roomNumberInput.value === '2') {
-//     capacitySelect1.selected = true;
-//     setDisabled(capacitySelect3);
-//     setDisabled(capacitySelect0);
-//   } else if (roomNumberInput.value === '3') {
-//     capacitySelect1.selected = true;
-//     setDisabled(capacitySelect0);
-//   } else if (roomNumberInput.value === '100') {
-//     capacitySelect0.selected = true;
-//     setDisabled(capacitySelect1);
-//     setDisabled(capacitySelect2);
-//     setDisabled(capacitySelect3);
-//   }
-// };
-
-// var changeGuests = function () {
-//   if (capacityInput.value === '1') {
-//     roomSelect1.selected = true;
-//     setDisabled(roomSelect100);
-//   } else if (capacityInput.value === '2') {
-//     roomSelect2.selected = true;
-//     setDisabled(roomSelect1);
-//     setDisabled(roomSelect100);
-//   } else if (capacityInput.value === '3') {
-//     roomSelect3.selected = true;
-//     setDisabled(roomSelect1);
-//     setDisabled(roomSelect2);
-//     setDisabled(roomSelect100);
-//   } else if (capacityInput.value === '0') {
-//     roomSelect100.selected = true;
-//     setDisabled(roomSelect1);
-//     setDisabled(roomSelect2);
-//     setDisabled(roomSelect3);
-//   }
-// };
-
-// roomNumberInput.addEventListener('change', function () {
-//   removeAllDisabled();
-//   changeRooms();
-// });
-
-// capacityInput.addEventListener('change', function () {
-//   removeAllDisabled();
-//   changeGuests();
-// });
