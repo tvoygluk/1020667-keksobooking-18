@@ -182,7 +182,7 @@ var onRoomNumberSelectChange = function () {
     [].forEach.call(capacitySelect.options, function (item) {
       item.classList.remove('visually-hidden');
       item.selected = (ROOMS_CAPACITY[roomNumberSelect.value][0] === item.value);
-      item.hidden = !(ROOMS_CAPACITY[roomNumberSelect.value].indexOf(item.value) >= 0);
+      item.disabled = !(ROOMS_CAPACITY[roomNumberSelect.value].indexOf(item.value) >= 0);
     });
   }
 };
