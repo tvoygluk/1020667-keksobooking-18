@@ -16,16 +16,20 @@ var ENTER_KEYCODE = 13;
 var ESC_KEYCODE = 27;
 var TYPES = {
   'palace': {
-    ru: 'Дворец'
+    ru: 'Дворец',
+    min: '10000'
   },
   'flat': {
-    ru: 'Квартира'
+    ru: 'Квартира',
+    min: '1000'
   },
   'house': {
-    ru: 'Дом'
+    ru: 'Дом',
+    min: '5000'
   },
   'bungalo': {
-    ru: 'Бунгало'
+    ru: 'Бунгало',
+    min: '0'
   }
 };
 var ROOMS_CAPACITY = {
@@ -36,7 +40,8 @@ var ROOMS_CAPACITY = {
 };
 
 // Создание моковых данных для карточек
-var mainField = document.querySelector('main');
+var map = document.querySelector('.map');
+var bodyField = document.querySelector('body');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
 var renderCard = function (pin) {
@@ -84,7 +89,7 @@ var renderCard = function (pin) {
 
   var closePopupElement = cardElement.querySelector('.popup__close');
   closePopupElement.addEventListener('click', onClosePopupClick);
-  mainField.addEventListener('keydown', onPopupEscPress);
+  bodyField.addEventListener('keydown', onPopupEscPress);
 
   return cardElement;
 };
@@ -162,8 +167,6 @@ var makeMocks = function () {
   return mocksArray;
 };
 
-var map = document.querySelector('.map');
-
 var similarListElement = map.querySelector('.map__pins');
 
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -208,18 +211,37 @@ var capacitySelect = adForm.querySelector('#capacity');
 
 var onRoomNumberSelectChange = function () {
   if (capacitySelect.options.length > 0) {
-    [].forEach.cmainField(capacitySelect.options, function (item) {
-      item.classList.remove('visumainFieldy-hidden');
+    [].forEach.call(capacitySelect.options, function (item) {
+      item.classList.remove('visually-hidden');
       item.selected = (ROOMS_CAPACITY[roomNumberSelect.value][0] === item.value);
       item.disabled = !(ROOMS_CAPACITY[roomNumberSelect.value].indexOf(item.value) >= 0);
     });
   }
 };
-
 roomNumberSelect.addEventListener('change', onRoomNumberSelectChange);
 
+var typeSelect = adForm.querySelector('#type');
+var priceInput = adForm.querySelector('#price');
+var onTypeSelectChange = function () {
+  var minPrice = TYPES[typeSelect.value].min;
+  priceInput.min = minPrice;
+  priceInput.placeholder = minPrice;
+};
+typeSelect.addEventListener('change', onTypeSelectChange);
+
+var timeInSelect = adForm.querySelector('#timein');
+var timeOutSelect = adForm.querySelector('#timeout');
+var setTimeInEqualTimeOut = function () {
+  timeOutSelect.value = timeInSelect.value;
+};
+var setTimeOutEqualTimeIn = function () {
+  timeInSelect.value = timeOutSelect.value;
+};
+timeInSelect.addEventListener('change', setTimeInEqualTimeOut);
+timeOutSelect.addEventListener('change', setTimeOutEqualTimeIn);
+
 // Активация страницы
-var fieldsets = adForm.querySelectormainField('fieldset');
+var fieldsets = adForm.querySelectorAll('fieldset');
 var mapPinMain = document.querySelector('.map__pin--main');
 var addressField = adForm.querySelector('#address');
 
