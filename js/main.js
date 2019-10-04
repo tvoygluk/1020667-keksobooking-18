@@ -113,7 +113,7 @@ var similarListElement = map.querySelector('.map__pins');
 
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
-// Отрисовка моковых данных
+// Отрисовка моковых данных (пинов)
 var pins = makeMocks();
 
 var renderPin = function (pin) {
@@ -125,7 +125,7 @@ var renderPin = function (pin) {
   return pinElement;
 };
 
-var addFragmentToLayout = function () {
+var addPinsToLayout = function () {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < pins.length; i++) {
@@ -168,9 +168,21 @@ var renderCard = function (pin) {
   }
 
   cardElement.querySelector('.popup__avatar').src = pin.author.avatar;
+  // cardElement.classList.add('hidden');
 
   return cardElement;
 };
+
+// Отрисовка моковых данных (карточки)
+// var addCardsToLayout = function () {
+//   var fragment = document.createDocumentFragment();
+
+//   for (var i = 0; i < pins.length; i++) {
+//     fragment.appendChild(renderCard(pins[i]));
+//   }
+//   map.appendChild(fragment);
+// };
+
 
 // Валидация формы
 var adForm = document.querySelector('.ad-form');
@@ -189,6 +201,104 @@ var onRoomNumberSelectChange = function () {
 
 roomNumberSelect.addEventListener('change', onRoomNumberSelectChange);
 
+// Обработка событий на pin
+
+var getElements = function () {
+  var somePin = document.querySelectorAll('.map__pin');
+
+  somePin.forEach(function (item1, j) {
+    somePin[String(j)].addEventListener('click', function () {
+      map.appendChild(renderCard(pins[String(j - 1)]));
+      var someCard = document.querySelectorAll('.map__card');
+      var closePopup = document.querySelectorAll('.popup__close');
+      closePopup.forEach(function (item2, i) {
+        closePopup[String(i)].addEventListener('click', function () {
+          someCard[String(i)].parentNode.removeChild(someCard[String(i)]);
+        });
+      });
+    });
+  });
+  // somePin[String(1)].addEventListener('click', function () {
+  //   map.appendChild(renderCard(pins[0]));
+  //   var someCard = document.querySelectorAll('.map__card');
+  //   var closePopup = document.querySelectorAll('.popup__close');
+  //   closePopup.forEach(function (item, i) {
+  //     closePopup[String(i)].addEventListener('click', function () {
+  //       someCard[String(i)].parentNode.removeChild(someCard[String(i)]);
+  //     });
+  //   });
+  // });
+  // somePin[2].addEventListener('click', function () {
+  //   map.appendChild(renderCard(pins[1]));
+  //   var someCard = document.querySelectorAll('.map__card');
+  //   var closePopup = document.querySelectorAll('.popup__close');
+  //   closePopup.forEach(function (item, i) {
+  //     closePopup[i].addEventListener('click', function () {
+  //       someCard[i].parentNode.removeChild(someCard[i]);
+  //     });
+  //   });
+  // });
+  // somePin[3].addEventListener('click', function () {
+  //   map.appendChild(renderCard(pins[2]));
+  //   var someCard = document.querySelectorAll('.map__card');
+  //   var closePopup = document.querySelectorAll('.popup__close');
+  //   closePopup.forEach(function (item, i) {
+  //     closePopup[i].addEventListener('click', function () {
+  //       someCard[i].parentNode.removeChild(someCard[i]);
+  //     });
+  //   });
+  // });
+  // somePin[4].addEventListener('click', function () {
+  //   map.appendChild(renderCard(pins[3]));
+  //   var someCard = document.querySelectorAll('.map__card');
+  //   var closePopup = document.querySelectorAll('.popup__close');
+  //   closePopup.forEach(function (item, i) {
+  //     closePopup[i].addEventListener('click', function () {
+  //       someCard[i].parentNode.removeChild(someCard[i]);
+  //     });
+  //   });
+  // });
+  // somePin[5].addEventListener('click', function () {
+  //   map.appendChild(renderCard(pins[4]));
+  //   var someCard = document.querySelectorAll('.map__card');
+  //   var closePopup = document.querySelectorAll('.popup__close');
+  //   closePopup.forEach(function (item, i) {
+  //     closePopup[i].addEventListener('click', function () {
+  //       someCard[i].parentNode.removeChild(someCard[i]);
+  //     });
+  //   });
+  // });
+  // somePin[6].addEventListener('click', function () {
+  //   map.appendChild(renderCard(pins[5]));
+  //   var someCard = document.querySelectorAll('.map__card');
+  //   var closePopup = document.querySelectorAll('.popup__close');
+  //   closePopup.forEach(function (item, i) {
+  //     closePopup[i].addEventListener('click', function () {
+  //       someCard[i].parentNode.removeChild(someCard[i]);
+  //     });
+  //   });
+  // });
+  // somePin[7].addEventListener('click', function () {
+  //   map.appendChild(renderCard(pins[6]));
+  //   var someCard = document.querySelectorAll('.map__card');
+  //   var closePopup = document.querySelectorAll('.popup__close');
+  //   closePopup.forEach(function (item, i) {
+  //     closePopup[i].addEventListener('click', function () {
+  //       someCard[i].parentNode.removeChild(someCard[i]);
+  //     });
+  //   });
+  // });
+  // somePin[8].addEventListener('click', function () {
+  //   map.appendChild(renderCard(pins[7]));
+  //   var someCard = document.querySelectorAll('.map__card');
+  //   var closePopup = document.querySelectorAll('.popup__close');
+  //   closePopup.forEach(function (item, i) {
+  //     closePopup[i].addEventListener('click', function () {
+  //       someCard[i].parentNode.removeChild(someCard[i]);
+  //     });
+  //   });
+  // });
+};
 
 // Активация страницы
 var fieldsets = adForm.querySelectorAll('fieldset');
@@ -212,8 +322,13 @@ var makePageActive = function () {
   toggleDisabled();
   adForm.classList.remove('ad-form--disabled');
   map.classList.remove('map--faded');
-  addFragmentToLayout();
-  map.appendChild(renderCard(pins[0]));
+
+  addPinsToLayout();
+  // addCardsToLayout();
+
+  getElements();
+
+  // map.appendChild(renderCard(pins[5]));
   setAddressValue();
   onRoomNumberSelectChange();
 };
@@ -227,6 +342,6 @@ var onMainPinKeyDown = function (evt) {
     makePageActive();
   }
 };
-mapPinMain.addEventListener('mousedown', onMainPinMouseDown);
-mapPinMain.addEventListener('keydown', onMainPinKeyDown);
-
+mapPinMain.addEventListener('mousedown', onMainPinMouseDown, {once: true});
+mapPinMain.addEventListener('keydown', onMainPinKeyDown, {once: true});
+//
