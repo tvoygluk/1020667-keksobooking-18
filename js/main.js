@@ -1,5 +1,6 @@
 'use strict';
 
+var MOCKS_LENGTH = 8;
 var CHECKIN_ARRAY = ['12:00', '13:00', '14:00'];
 var CHECKOUT_ARRAY = ['12:00', '13:00', '14:00'];
 var APARTMENT_TYPE_ARRAY = ['palace', 'flat', 'house', 'bungalo'];
@@ -10,6 +11,8 @@ var BOTTOM_LIMIT_POSITION_PIN = 630;
 var PIN_PARENT_WIDTH = document.querySelector('.map__pin').parentNode.offsetWidth;
 var PIN_HEIGHT = 70;
 var PIN_WIDTH = 50;
+var MAIN_PIN_EXTRA_HEIGHT = 15;
+var ENTER_KEYCODE = 13;
 var TYPES = {
   'palace': {
     ru: 'Дворец'
@@ -24,7 +27,14 @@ var TYPES = {
     ru: 'Бунгало'
   }
 };
+var ROOMS_CAPACITY = {
+  '1': ['1'],
+  '2': ['1', '2'],
+  '3': ['1', '2', '3'],
+  '100': ['0']
+};
 
+// Создание моковых данных для пинов
 var getRandomArrayElement = function (someArray) {
   return someArray[Math.floor(Math.random() * someArray.length)];
 };
@@ -62,7 +72,6 @@ var randomInteger = function (min, max) {
 };
 
 var makeMocks = function () {
-  var MOCKS_LENGTH = 8;
   var mocksArray = [];
 
   for (var i = 0; i < MOCKS_LENGTH; i++) {
@@ -99,12 +108,12 @@ var makeMocks = function () {
 };
 
 var map = document.querySelector('.map');
-map.classList.remove('map--faded');
 
 var similarListElement = map.querySelector('.map__pins');
 
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
+// Отрисовка моковых данных
 var pins = makeMocks();
 
 var renderPin = function (pin) {
@@ -116,20 +125,19 @@ var renderPin = function (pin) {
   return pinElement;
 };
 
-var addFragmentToLayout = function (mocks, addedBlock, renderFun) {
+var addFragmentToLayout = function () {
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < mocks.length; i++) {
-    fragment.appendChild(renderFun(mocks[i]));
+  for (var i = 0; i < pins.length; i++) {
+    fragment.appendChild(renderPin(pins[i]));
   }
-  addedBlock.appendChild(fragment);
+  similarListElement.appendChild(fragment);
 };
 
-addFragmentToLayout(pins, similarListElement, renderPin);
-
+// Создание моковых данных для карточек
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
-var renserCard = function (pin) {
+var renderCard = function (pin) {
   var cardElement = cardTemplate.cloneNode(true);
   cardElement.querySelector('.popup__title').textContent = pin.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = pin.offer.address;
@@ -164,5 +172,61 @@ var renserCard = function (pin) {
   return cardElement;
 };
 
-var cardListElement = document.querySelector('.map');
-addFragmentToLayout(pins, cardListElement, renserCard);
+// Валидация формы
+var adForm = document.querySelector('.ad-form');
+var roomNumberSelect = adForm.querySelector('#room_number');
+var capacitySelect = adForm.querySelector('#capacity');
+
+var onRoomNumberSelectChange = function () {
+  if (capacitySelect.options.length > 0) {
+    [].forEach.call(capacitySelect.options, function (item) {
+      item.classList.remove('visually-hidden');
+      item.selected = (ROOMS_CAPACITY[roomNumberSelect.value][0] === item.value);
+      item.disabled = !(ROOMS_CAPACITY[roomNumberSelect.value].indexOf(item.value) >= 0);
+    });
+  }
+};
+
+roomNumberSelect.addEventListener('change', onRoomNumberSelectChange);
+
+
+// Активация страницы
+var fieldsets = adForm.querySelectorAll('fieldset');
+var mapPinMain = document.querySelector('.map__pin--main');
+var addressField = adForm.querySelector('#address');
+
+var toggleDisabled = function () {
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = !fieldsets[i].disabled;
+  }
+};
+toggleDisabled();
+
+var setAddressValue = function () {
+  addressField.value = (map.classList.contains('map--faded')) ? Math.floor(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2) + ', ' + Math.floor(parseInt(mapPinMain.style.top, 10) + mapPinMain.offsetHeight / 2) : Math.floor(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2) + ', ' + Math.floor(parseInt(mapPinMain.style.top, 10) + mapPinMain.offsetHeight + MAIN_PIN_EXTRA_HEIGHT);
+};
+
+setAddressValue();
+
+var makePageActive = function () {
+  toggleDisabled();
+  adForm.classList.remove('ad-form--disabled');
+  map.classList.remove('map--faded');
+  addFragmentToLayout();
+  map.appendChild(renderCard(pins[0]));
+  setAddressValue();
+  onRoomNumberSelectChange();
+};
+
+var onMainPinMouseDown = function () {
+  makePageActive();
+};
+
+var onMainPinKeyDown = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    makePageActive();
+  }
+};
+mapPinMain.addEventListener('mousedown', onMainPinMouseDown);
+mapPinMain.addEventListener('keydown', onMainPinKeyDown);
+
