@@ -39,10 +39,44 @@ var ROOMS_CAPACITY = {
   '100': ['0']
 };
 
+var getRightCase = function (inputNumber, firstCase, secondCase, thirdCase) {
+
+  if (inputNumber > 10 && (Math.round((inputNumber % 100) / 10) === 1)) {
+    return thirdCase;
+  } else {
+    switch (inputNumber % 10) {
+      case 1: return firstCase;
+      case 2:
+      case 3:
+      case 4: return secondCase;
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+      case 9:
+      case 0: return thirdCase;
+    }
+  }
+};
+
+for (var i = 0; i < 50; i++) {
+  console.log([i] + ' ' + getRightCase([i], 'рубль', 'рубля', 'рублей'));
+}
+
 // Создание моковых данных для карточек
 var map = document.querySelector('.map');
 var bodyField = document.querySelector('body');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+
+
+var closePopup = function (cardElement) {
+  try {
+    cardElement.parentNode.removeChild(cardElement);
+  } catch (err) {
+    // Ошибка при зажатой клавише ESC без карточек
+  }
+
+};
 
 var renderCard = function (pin) {
   var cardElement = cardTemplate.cloneNode(true);
@@ -75,18 +109,15 @@ var renderCard = function (pin) {
   }
   cardElement.querySelector('.popup__avatar').src = pin.author.avatar;
 
-  var closePopup = function () {
-    cardElement.parentNode.removeChild(cardElement);
-  };
   var onClosePopupClick = function () {
-    closePopup();
+    closePopup(cardElement);
   };
   var onPopupEscPress = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
-      closePopup();
+      closePopup(cardElement);
     }
+    bodyField.removeEventListener('keydown', onPopupEscPress);
   };
-
   var closePopupElement = cardElement.querySelector('.popup__close');
   closePopupElement.addEventListener('click', onClosePopupClick);
   bodyField.addEventListener('keydown', onPopupEscPress);
@@ -181,12 +212,20 @@ var renderPin = function (pin) {
   pinElement.querySelector('.map__pin img').alt = pin.offer.title;
   pinElement.tabIndex = 0;
 
-  var onPinClick = function () {
+  var workCard = function () {
+    try {
+      closePopup(document.querySelector('.popup__close'));
+    } catch (err) {
+      // Ошибка при закрытии ешё не созданного элемента
+    }
     map.appendChild(renderCard(pin));
+  };
+  var onPinClick = function () {
+    workCard();
   };
   var onPinKeyDown = function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
-      map.appendChild(renderCard(pin));
+      workCard();
     }
   };
   pinElement.addEventListener('click', onPinClick);
