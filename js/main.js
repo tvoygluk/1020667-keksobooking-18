@@ -57,11 +57,8 @@ var getRightCase = function (inputNumber, firstCase, secondCase, thirdCase) {
       case 0: return thirdCase;
     }
   }
+  return thirdCase;
 };
-
-for (var i = 0; i < 50; i++) {
-  console.log([i] + ' ' + getRightCase([i], 'рубль', 'рубля', 'рублей'));
-}
 
 // Создание моковых данных для карточек
 var map = document.querySelector('.map');
@@ -84,7 +81,7 @@ var renderCard = function (pin) {
   cardElement.querySelector('.popup__text--address').textContent = pin.offer.address;
   cardElement.querySelector('.popup__text--price').textContent = pin.offer.price;
   cardElement.querySelector('.popup__type').textContent = TYPES[pin.offer.type].ru;
-  cardElement.querySelector('.popup__text--capacity').textContent = pin.offer.rooms + ' комнаты для ' + pin.offer.guests + ' гостей';
+  cardElement.querySelector('.popup__text--capacity').textContent = pin.offer.rooms + ' ' + getRightCase(pin.offer.rooms, 'комната', 'комнаты', 'комнат') + ' для ' + pin.offer.guests + ' ' + getRightCase(pin.offer.guests, 'гостя', 'гостей', 'гостей');
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout;
 
   var features = cardElement.querySelector('.popup__features');
@@ -165,10 +162,10 @@ var randomInteger = function (min, max) {
 var makeMocks = function () {
   var mocksArray = [];
 
-  for (var i = 0; i < MOCKS_LENGTH; i++) {
+  for (var k = 0; k < MOCKS_LENGTH; k++) {
     var mockObj = {
       'author': {
-        'avatar': 'img/avatars/user0' + (i + 1) + '.png'
+        'avatar': 'img/avatars/user0' + (k + 1) + '.png'
       },
 
       'offer': {
@@ -176,8 +173,8 @@ var makeMocks = function () {
         'address': '600, 350',
         'price': '5200₽/ночь',
         'type': getRandomArrayElement(APARTMENT_TYPE_ARRAY),
-        'rooms': '2',
-        'guests': '3',
+        'rooms': '3',
+        'guests': '1',
         'checkin': getRandomArrayElement(CHECKIN_ARRAY),
         'checkout': getRandomArrayElement(CHECKOUT_ARRAY),
         'features': makeNewShorterShuffleArray(FEATURES_ARRAY),
@@ -237,8 +234,8 @@ var renderPin = function (pin) {
 var addPinsToLayout = function () {
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < pins.length; i++) {
-    fragment.appendChild(renderPin(pins[i]));
+  for (var l = 0; l < pins.length; l++) {
+    fragment.appendChild(renderPin(pins[l]));
   }
   similarListElement.appendChild(fragment);
 };
@@ -285,8 +282,8 @@ var mapPinMain = document.querySelector('.map__pin--main');
 var addressField = adForm.querySelector('#address');
 
 var toggleDisabled = function () {
-  for (var i = 0; i < fieldsets.length; i++) {
-    fieldsets[i].disabled = !fieldsets[i].disabled;
+  for (var m = 0; m < fieldsets.length; m++) {
+    fieldsets[m].disabled = !fieldsets[m].disabled;
   }
 };
 toggleDisabled();
