@@ -211,7 +211,7 @@ var renderPin = function (pin) {
 
   var workCard = function () {
     try {
-      closePopup(document.querySelector('.popup__close'));
+      closePopup(document.querySelector('.popup'));
     } catch (err) {
       // Ошибка при закрытии ешё не созданного элемента
     }
