@@ -104,11 +104,11 @@ var renderCard = function (pin) {
   cardElement.querySelector('.popup__avatar').src = pin.author.avatar;
 
   var onClosePopupClick = function () {
-    closePopup(cardElement);
+    closePopup();
   };
   var onPopupEscPress = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
-      closePopup(cardElement);
+      closePopup();
       bodyField.removeEventListener('keydown', onPopupEscPress);
     }
   };
@@ -207,7 +207,7 @@ var renderPin = function (pin) {
   pinElement.tabIndex = 0;
 
   var workCard = function () {
-    closePopup(document.querySelector('.popup'));
+    closePopup();
     map.appendChild(renderCard(pin));
   };
   var onPinClick = function () {
