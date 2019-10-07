@@ -60,9 +60,11 @@ var bodyField = document.querySelector('body');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
 var closePopup = function () {
+  var mapPinActive = map.querySelector('.map__pin--active');
   var popup = map.querySelector('.popup');
   if (popup !== null) {
     popup.remove();
+    mapPinActive.classList.remove('map__pin--active');
   }
 };
 
@@ -203,6 +205,7 @@ var renderPin = function (pin) {
   var workCard = function () {
     closePopup();
     map.appendChild(renderCard(pin));
+    pinElement.classList.add('map__pin--active');
   };
   var onPinClick = function () {
     workCard();
