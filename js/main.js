@@ -65,14 +65,10 @@ var map = document.querySelector('.map');
 var bodyField = document.querySelector('body');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
-
 var closePopup = function (cardElement) {
-  try {
+  if (cardElement !== null) {
     cardElement.parentNode.removeChild(cardElement);
-  } catch (err) {
-    // Ошибка при зажатой клавише ESC без карточек
   }
-
 };
 
 var renderCard = function (pin) {
@@ -111,9 +107,11 @@ var renderCard = function (pin) {
   };
   var onPopupEscPress = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
-      closePopup(cardElement);
+      if (cardElement !== null) {
+        closePopup(cardElement);
+      }
+      bodyField.removeEventListener('keydown', onPopupEscPress);
     }
-    bodyField.removeEventListener('keydown', onPopupEscPress);
   };
   var closePopupElement = cardElement.querySelector('.popup__close');
   closePopupElement.addEventListener('click', onClosePopupClick);
@@ -210,10 +208,8 @@ var renderPin = function (pin) {
   pinElement.tabIndex = 0;
 
   var workCard = function () {
-    try {
+    if (document.querySelector('.popup') !== null) {
       closePopup(document.querySelector('.popup'));
-    } catch (err) {
-      // Ошибка при закрытии ешё не созданного элемента
     }
     map.appendChild(renderCard(pin));
   };
@@ -317,4 +313,3 @@ var makePageActive = function () {
 
 mapPinMain.addEventListener('mousedown', onMainPinMouseDown);
 mapPinMain.addEventListener('keydown', onMainPinKeyDown);
-//
