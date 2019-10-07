@@ -65,9 +65,10 @@ var map = document.querySelector('.map');
 var bodyField = document.querySelector('body');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
-var closePopup = function (cardElement) {
-  if (cardElement !== null) {
-    cardElement.parentNode.removeChild(cardElement);
+var closePopup = function () {
+  var popup = map.querySelector('.popup');
+  if (popup !== null) {
+    popup.remove();
   }
 };
 
@@ -107,9 +108,7 @@ var renderCard = function (pin) {
   };
   var onPopupEscPress = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
-      if (cardElement !== null) {
-        closePopup(cardElement);
-      }
+      closePopup(cardElement);
       bodyField.removeEventListener('keydown', onPopupEscPress);
     }
   };
@@ -208,9 +207,7 @@ var renderPin = function (pin) {
   pinElement.tabIndex = 0;
 
   var workCard = function () {
-    if (document.querySelector('.popup') !== null) {
-      closePopup(document.querySelector('.popup'));
-    }
+    closePopup(document.querySelector('.popup'));
     map.appendChild(renderCard(pin));
   };
   var onPinClick = function () {
