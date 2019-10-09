@@ -32,14 +32,11 @@
   };
 
   var makeArrayRandomShorterSize = function (str) {
-    var array = str.split(', ');
-    array = str.split(', ', Math.floor(Math.random() * array.length));
-
-    return array;
+    return str.slice(0, randomInteger(0, str.length) + 1);
   };
 
   var makeNewShorterShuffleArray = function (array) {
-    return makeArrayRandomShorterSize(shuffleArray(array).join(', '));
+    return makeArrayRandomShorterSize(shuffleArray(array));
   };
 
   var randomInteger = function (min, max) {

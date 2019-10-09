@@ -16,7 +16,9 @@
   toggleDisabled();
 
   var setAddressValue = function () {
-    addressField.value = (window.cardRender.map.classList.contains('map--faded')) ? Math.floor(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2) + ', ' + Math.floor(parseInt(mapPinMain.style.top, 10) + mapPinMain.offsetHeight / 2) : Math.floor(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2) + ', ' + Math.floor(parseInt(mapPinMain.style.top, 10) + mapPinMain.offsetHeight + MAIN_PIN_EXTRA_HEIGHT);
+    var mapPinMainXCenter = Math.floor(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2);
+    var mapPinMainYTop = parseInt(mapPinMain.style.top, 10);
+    addressField.value = (window.cardRender.map.classList.contains('map--faded')) ? mapPinMainXCenter + ', ' + Math.floor(mapPinMainYTop + mapPinMain.offsetHeight / 2) : mapPinMainXCenter + ', ' + Math.floor(mapPinMainYTop + mapPinMain.offsetHeight + MAIN_PIN_EXTRA_HEIGHT);
   };
 
   setAddressValue();
