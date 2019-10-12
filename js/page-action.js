@@ -24,11 +24,11 @@
 
   setAddressValue();
 
-  var onMainPinMouseDown = function () {
+  var onMainPinMouseUp = function () {
     makePageActive();
   };
 
-  var onMainPinKeyDown = function (evt) {
+  var onMainPinKeyUp = function (evt) {
     if (evt.keyCode === window.pinRender.ENTER_KEYCODE) {
       makePageActive();
     }
@@ -42,17 +42,17 @@
     setAddressValue();
     window.form.onRoomNumberSelectChange();
     window.form.onTypeSelectChange();
-    mapPinMain.removeEventListener('mousedown', onMainPinMouseDown);
-    mapPinMain.removeEventListener('keydown', onMainPinKeyDown);
-    window.mainPin.moveMainPin();
+    mapPinMain.removeEventListener('mouseup', onMainPinMouseUp);
+    mapPinMain.removeEventListener('keyup', onMainPinKeyUp);
   };
 
-  mapPinMain.addEventListener('mousedown', onMainPinMouseDown);
-  mapPinMain.addEventListener('keydown', onMainPinKeyDown);
+  mapPinMain.addEventListener('mouseup', onMainPinMouseUp);
+  mapPinMain.addEventListener('keyup', onMainPinKeyUp);
 
   window.pageAction = {
     mapPinMain: mapPinMain,
     setAddressValue: setAddressValue,
-    MAIN_PIN_EXTRA_HEIGHT: MAIN_PIN_EXTRA_HEIGHT
+    MAIN_PIN_EXTRA_HEIGHT: MAIN_PIN_EXTRA_HEIGHT,
+    onMainPinMouseUp: onMainPinMouseUp
   };
 })();
