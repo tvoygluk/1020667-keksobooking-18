@@ -38,7 +38,6 @@
 
       if (isUncorrectPosX || isUncorrectPosY) {
         document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseUp);
       }
     };
 
