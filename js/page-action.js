@@ -53,6 +53,6 @@
     mapPinMain: mapPinMain,
     setAddressValue: setAddressValue,
     MAIN_PIN_EXTRA_HEIGHT: MAIN_PIN_EXTRA_HEIGHT,
-    onMainPinMouseUp: onMainPinMouseUp
+    makePageActive: makePageActive
   };
 })();
