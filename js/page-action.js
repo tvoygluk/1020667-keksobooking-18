@@ -2,7 +2,7 @@
 
 // Активация страницы page-action.js
 (function () {
-  var MAIN_PIN_EXTRA_HEIGHT = 15;
+  var MAIN_PIN_EXTRA_HEIGHT = 16;
 
   var fieldsets = window.form.adForm.querySelectorAll('fieldset');
   var mapPinMain = document.querySelector('.map__pin--main');
@@ -24,11 +24,11 @@
 
   setAddressValue();
 
-  var onMainPinMouseUp = function () {
+  var onMainPinMouseDown = function () {
     makePageActive();
   };
 
-  var onMainPinKeyUp = function (evt) {
+  var onMainPinKeyDown = function (evt) {
     if (evt.keyCode === window.pinRender.ENTER_KEYCODE) {
       makePageActive();
     }
@@ -42,12 +42,12 @@
     setAddressValue();
     window.form.onRoomNumberSelectChange();
     window.form.onTypeSelectChange();
-    mapPinMain.removeEventListener('mouseup', onMainPinMouseUp);
-    mapPinMain.removeEventListener('keyup', onMainPinKeyUp);
+    mapPinMain.removeEventListener('mousedown', onMainPinMouseDown);
+    mapPinMain.removeEventListener('keyup', onMainPinKeyDown);
   };
 
-  mapPinMain.addEventListener('mouseup', onMainPinMouseUp);
-  mapPinMain.addEventListener('keyup', onMainPinKeyUp);
+  mapPinMain.addEventListener('mousedown', onMainPinMouseDown);
+  mapPinMain.addEventListener('keyup', onMainPinKeyDown);
 
   window.pageAction = {
     mapPinMain: mapPinMain,
