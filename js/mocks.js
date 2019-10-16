@@ -82,6 +82,9 @@
   };
 
   window.mocks = {
-    makeMocks: makeMocks
+    makeMocks: makeMocks,
+    TOP_LIMIT_POSITION_PIN: TOP_LIMIT_POSITION_PIN,
+    BOTTOM_LIMIT_POSITION_PIN: BOTTOM_LIMIT_POSITION_PIN,
+    PIN_PARENT_WIDTH: PIN_PARENT_WIDTH
   };
 })();

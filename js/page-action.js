@@ -2,7 +2,7 @@
 
 // Активация страницы page-action.js
 (function () {
-  var MAIN_PIN_EXTRA_HEIGHT = 15;
+  var MAIN_PIN_EXTRA_HEIGHT = 16;
 
   var fieldsets = window.form.adForm.querySelectorAll('fieldset');
   var mapPinMain = document.querySelector('.map__pin--main');
@@ -15,10 +15,11 @@
   };
   toggleDisabled();
 
-  var setAddressValue = function () {
-    var mapPinMainXCenter = Math.floor(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2);
-    var mapPinMainYTop = parseInt(mapPinMain.style.top, 10);
-    addressField.value = (window.cardRender.map.classList.contains('map--faded')) ? mapPinMainXCenter + ', ' + Math.floor(mapPinMainYTop + mapPinMain.offsetHeight / 2) : mapPinMainXCenter + ', ' + Math.floor(mapPinMainYTop + mapPinMain.offsetHeight + MAIN_PIN_EXTRA_HEIGHT);
+  var setAddressValue = function (element) {
+    var el = element || mapPinMain;
+    var mapPinMainXCenter = Math.floor(parseInt(el.style.left, 10) + el.offsetWidth / 2);
+    var mapPinMainYTop = parseInt(el.style.top, 10);
+    addressField.value = (window.cardRender.map.classList.contains('map--faded')) ? mapPinMainXCenter + ', ' + Math.floor(mapPinMainYTop + el.offsetHeight / 2) : mapPinMainXCenter + ', ' + Math.floor(mapPinMainYTop + el.offsetHeight + MAIN_PIN_EXTRA_HEIGHT);
   };
 
   setAddressValue();
@@ -42,9 +43,16 @@
     window.form.onRoomNumberSelectChange();
     window.form.onTypeSelectChange();
     mapPinMain.removeEventListener('mousedown', onMainPinMouseDown);
-    mapPinMain.removeEventListener('keydown', onMainPinKeyDown);
+    mapPinMain.removeEventListener('keyup', onMainPinKeyDown);
   };
 
   mapPinMain.addEventListener('mousedown', onMainPinMouseDown);
-  mapPinMain.addEventListener('keydown', onMainPinKeyDown);
+  mapPinMain.addEventListener('keyup', onMainPinKeyDown);
+
+  window.pageAction = {
+    mapPinMain: mapPinMain,
+    setAddressValue: setAddressValue,
+    MAIN_PIN_EXTRA_HEIGHT: MAIN_PIN_EXTRA_HEIGHT,
+    makePageActive: makePageActive
+  };
 })();
