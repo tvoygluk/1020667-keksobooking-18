@@ -51,34 +51,68 @@
 
   var renderCard = function (pin) {
     var cardElement = cardTemplate.cloneNode(true);
-    cardElement.querySelector('.popup__title').textContent = pin.offer.title;
-    cardElement.querySelector('.popup__text--address').textContent = pin.offer.address;
-    cardElement.querySelector('.popup__text--price').textContent = pin.offer.price;
-    cardElement.querySelector('.popup__type').textContent = TYPES[pin.offer.type].ru;
-    cardElement.querySelector('.popup__text--capacity').textContent = pin.offer.rooms + ' ' + getRightCase(pin.offer.rooms, 'комната', 'комнаты', 'комнат') + ' для ' + pin.offer.guests + ' ' + getRightCase(pin.offer.guests, 'гостя', 'гостей', 'гостей');
-    cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout;
+
+    var popupTitle = cardElement.querySelector('.popup__title');
+    var popupTextAdress = cardElement.querySelector('.popup__text--address');
+    var popupTextPrice = cardElement.querySelector('.popup__text--price');
+    var popupType = cardElement.querySelector('.popup__type');
+    var popupTextCapacity = cardElement.querySelector('.popup__text--capacity');
+    var popupTextTime = cardElement.querySelector('.popup__text--time');
+
+    var checkExist = function (elem, val) {
+      if (elem) {
+        elem.textContent = val;
+      } else {
+        elem.classList.add('hidden');
+      }
+    };
+    checkExist(popupTitle, pin.offer.title);
+    checkExist(popupTextAdress, pin.offer.address);
+    checkExist(popupTextPrice, pin.offer.price);
+    checkExist(popupType, TYPES[pin.offer.type].ru);
+
+    if ((pin.offer.rooms !== 0) && (pin.offer.guests !== 0)) {
+      popupTextCapacity.textContent = pin.offer.rooms + ' ' + getRightCase(pin.offer.rooms, 'комната', 'комнаты', 'комнат') + ' для ' + pin.offer.guests + ' ' + getRightCase(pin.offer.guests, 'гостя', 'гостей', 'гостей');
+    } else {
+      popupTextCapacity.classList.add('hidden');
+    }
+
+    checkExist(popupTextTime, 'Заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout);
 
     var features = cardElement.querySelector('.popup__features');
     features.innerHTML = '';
-    for (var i = 0; i < pin.offer.features.length; i++) {
-      var featuresElement = document.createElement('li');
-      featuresElement.className = ('popup__feature popup__feature--' + pin.offer.features[i]);
-      features.appendChild(featuresElement);
+    if (pin.offer.features.length !== 0) {
+      for (var i = 0; i < pin.offer.features.length; i++) {
+        var featuresElement = document.createElement('li');
+        featuresElement.className = ('popup__feature popup__feature--' + pin.offer.features[i]);
+        features.appendChild(featuresElement);
+      }
+    } else {
+      features.classList.add('hidden');
     }
 
-    cardElement.querySelector('.popup__description').textContent = pin.offer.description;
+    var popupDescription = cardElement.querySelector('.popup__description');
+    checkExist(popupDescription, pin.offer.description);
+
+
     var popupPhotos = cardElement.querySelector('.popup__photos');
     popupPhotos.innerHTML = '';
-    for (var j = 0; j < pin.offer.photos.length; j++) {
-      var photoElement = document.createElement('img');
-      photoElement.src = pin.offer.photos[j];
-      photoElement.className = ('popup__photo');
-      photoElement.width = 45;
-      photoElement.height = 40;
-      photoElement.alt = 'Фотография жилья';
-      popupPhotos.appendChild(photoElement);
+    if (pin.offer.photos.length !== 0) {
+      for (var j = 0; j < pin.offer.photos.length; j++) {
+        var photoElement = document.createElement('img');
+        photoElement.src = pin.offer.photos[j];
+        photoElement.className = ('popup__photo');
+        photoElement.width = 45;
+        photoElement.height = 40;
+        photoElement.alt = 'Фотография жилья';
+        popupPhotos.appendChild(photoElement);
+      }
+    } else {
+      popupPhotos.classList.add('hidden');
     }
-    cardElement.querySelector('.popup__avatar').src = pin.author.avatar;
+
+    var popupAvatar = cardElement.querySelector('.popup__avatar');
+    popupAvatar.src = pin.author.avatar;
 
     var onClosePopupClick = function () {
       closePopup();
@@ -101,7 +135,8 @@
     ESC_KEYCODE: ESC_KEYCODE,
     map: map,
     renderCard: renderCard,
-    closePopup: closePopup
+    closePopup: closePopup,
+    bodyField: bodyField
   };
 })();
 

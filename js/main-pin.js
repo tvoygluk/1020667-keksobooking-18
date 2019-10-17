@@ -2,6 +2,9 @@
 
 // Перетаскивание главного пина
 (function () {
+  var TOP_LIMIT_POSITION_PIN = 130;
+  var BOTTOM_LIMIT_POSITION_PIN = 630;
+  var PIN_PARENT_WIDTH = document.querySelector('.map__pin').parentNode.offsetWidth;
   var MAIN_PIN_PARAM = {
     height: window.pageAction.mapPinMain.offsetHeight + window.pageAction.MAIN_PIN_EXTRA_HEIGHT,
     halfWidth: window.pageAction.mapPinMain.offsetWidth / 2
@@ -13,18 +16,18 @@
     var mapPinMainYBottom = mapPinMainYTop + window.pageAction.mapPinMain.offsetHeight + window.pageAction.MAIN_PIN_EXTRA_HEIGHT;
 
     var isUncorrectPosXMin = (mapPinMainXCenter <= 1);
-    var isUncorrectPosXMax = (mapPinMainXCenter >= window.mocks.PIN_PARENT_WIDTH);
-    var isUncorrectPosYMin = (mapPinMainYBottom <= window.mocks.TOP_LIMIT_POSITION_PIN);
-    var isUncorrectPosYMax = (mapPinMainYBottom >= window.mocks.BOTTOM_LIMIT_POSITION_PIN);
+    var isUncorrectPosXMax = (mapPinMainXCenter >= PIN_PARENT_WIDTH);
+    var isUncorrectPosYMin = (mapPinMainYBottom <= TOP_LIMIT_POSITION_PIN);
+    var isUncorrectPosYMax = (mapPinMainYBottom >= BOTTOM_LIMIT_POSITION_PIN);
 
     if (isUncorrectPosXMin) {
       window.pageAction.mapPinMain.style.left = (-MAIN_PIN_PARAM.halfWidth + 1) + 'px';
     } else if (isUncorrectPosXMax) {
-      window.pageAction.mapPinMain.style.left = (window.mocks.PIN_PARENT_WIDTH - MAIN_PIN_PARAM.halfWidth) + 'px';
+      window.pageAction.mapPinMain.style.left = (PIN_PARENT_WIDTH - MAIN_PIN_PARAM.halfWidth) + 'px';
     } else if (isUncorrectPosYMin) {
-      window.pageAction.mapPinMain.style.top = (window.mocks.TOP_LIMIT_POSITION_PIN - MAIN_PIN_PARAM.height) + 'px';
+      window.pageAction.mapPinMain.style.top = (TOP_LIMIT_POSITION_PIN - MAIN_PIN_PARAM.height) + 'px';
     } else if (isUncorrectPosYMax) {
-      window.pageAction.mapPinMain.style.top = (window.mocks.BOTTOM_LIMIT_POSITION_PIN - MAIN_PIN_PARAM.height) + 'px';
+      window.pageAction.mapPinMain.style.top = (BOTTOM_LIMIT_POSITION_PIN - MAIN_PIN_PARAM.height) + 'px';
     }
   };
 
