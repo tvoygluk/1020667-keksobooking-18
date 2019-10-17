@@ -38,7 +38,8 @@
     toggleDisabled();
     window.form.adForm.classList.remove('ad-form--disabled');
     window.cardRender.map.classList.remove('map--faded');
-    window.pinRender.addPinsToLayout();
+    window.backend.load(window.backendRender.successHandler, window.backendRender.errorHandler);
+    // window.pinRender.addPinsToLayout();
     setAddressValue();
     window.form.onRoomNumberSelectChange();
     window.form.onTypeSelectChange();
