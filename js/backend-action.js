@@ -5,34 +5,64 @@
 
   var successHandler = window.pinRender.addPinsToLayout;
 
-  var errorHandler = function (errorMessage) {
-    var errTemplate = document.querySelector('#error').content.querySelector('.error');
-    var someErr = errTemplate.cloneNode(true);
-    var errMess = someErr.querySelector('.error__message');
-    errMess.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', someErr);
+  var addSomethingToLayout = function (something) {
+    var fragment = document.createDocumentFragment();
+    fragment.appendChild(something);
+    document.body.children[0].appendChild(fragment);
+  };
 
-    var errBut = someErr.querySelector('.error__button');
+  var makeSuccessMessage = function () {
+    var successTemplate = document.querySelector('#success').content.querySelector('.success');
+    var someSuccess = successTemplate.cloneNode(true);
+    addSomethingToLayout(someSuccess);
 
-    var closeErrBut = function () {
-      if (someErr !== null) {
-        someErr.remove();
+    var closeSuccess = function () {
+      if (someSuccess !== null) {
+        someSuccess.remove();
       }
     };
 
-    var onErrButClick = function () {
-      closeErrBut();
+    var onSuccessClick = function () {
+      closeSuccess();
     };
 
-    var onErrButEscPress = function (evt) {
+    var onEscPress = function (evt) {
       if (evt.keyCode === window.cardRender.ESC_KEYCODE) {
-        closeErrBut();
-        window.cardRender.bodyField.removeEventListener('keydown', onErrButEscPress);
+        closeSuccess();
+        window.cardRender.bodyField.removeEventListener('keydown', onEscPress);
+      }
+    };
+    document.addEventListener('click', onSuccessClick);
+    window.cardRender.bodyField.addEventListener('keydown', onEscPress);
+  };
+
+  var errorHandler = function (message) {
+    var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+    var someError = errorTemplate.cloneNode(true);
+    var errorMessage = someError.querySelector('.error__message');
+    errorMessage.textContent = message;
+
+    addSomethingToLayout(someError);
+
+    var closeErrorButton = function () {
+      if (someError !== null) {
+        someError.remove();
       }
     };
 
-    errBut.addEventListener('click', onErrButClick);
-    window.cardRender.bodyField.addEventListener('keydown', onErrButEscPress);
+    var onErrorClick = function () {
+      closeErrorButton();
+    };
+
+    var onEscPress = function (evt) {
+      if (evt.keyCode === window.cardRender.ESC_KEYCODE) {
+        closeErrorButton();
+        window.cardRender.bodyField.removeEventListener('keydown', onEscPress);
+      }
+    };
+
+    document.addEventListener('click', onErrorClick);
+    window.cardRender.bodyField.addEventListener('keydown', onEscPress);
   };
 
   var makePageDefault = function () {
@@ -75,16 +105,17 @@
 
     window.pageAction.mapPinMain.style.top = MAIN_PIN_POS_Y + 'px';
     window.pageAction.mapPinMain.style.left = MAIN_PIN_POS_X + 'px';
-    window.pageAction.setAddressValue(window.pageAction.mapPinMain);
     window.pageAction.toggleDisabled();
     window.form.adForm.classList.add('ad-form--disabled');
     window.cardRender.map.classList.add('map--faded');
+    window.pageAction.setAddressValue(window.pageAction.mapPinMain);
     window.pageAction.mapPinMain.addEventListener('mousedown', window.pageAction.onMainPinMouseDown);
     window.pageAction.mapPinMain.addEventListener('keydown', window.pageAction.onMainPinKeyDown);
   };
 
   var sendData = function () {
     makePageDefault();
+    makeSuccessMessage();
   };
 
   var onSubmitForm = function (evt) {
@@ -95,6 +126,7 @@
   window.backendAction = {
     successHandler: successHandler,
     errorHandler: errorHandler,
-    onSubmitForm: onSubmitForm
+    onSubmitForm: onSubmitForm,
+    makePageDefault: makePageDefault
   };
 })();

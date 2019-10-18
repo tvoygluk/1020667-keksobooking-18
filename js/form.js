@@ -51,6 +51,13 @@
   timeOutSelect.addEventListener('change', setTimeOutEqualTimeIn);
   adForm.addEventListener('submit', window.backendAction.onSubmitForm);
 
+  var onClickButtonReset = function () {
+    window.backendAction.makePageDefault();
+  };
+
+  var buttonReset = adForm.querySelector('.ad-form__reset');
+  buttonReset.addEventListener('click', onClickButtonReset);
+
   window.form = {
     adForm: adForm,
     onRoomNumberSelectChange: onRoomNumberSelectChange,

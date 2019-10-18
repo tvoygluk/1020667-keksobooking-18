@@ -9,9 +9,9 @@
   var addressField = window.form.adForm.querySelector('#address');
 
   var toggleDisabled = function () {
-    for (var m = 0; m < fieldsets.length; m++) {
-      fieldsets[m].disabled = !fieldsets[m].disabled;
-    }
+    fieldsets.forEach(function (element) {
+      element.disabled = !element.disabled;
+    });
   };
   toggleDisabled();
 
