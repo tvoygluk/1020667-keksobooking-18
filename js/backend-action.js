@@ -36,8 +36,18 @@
   };
 
   var sendData = function () {
+    // window.form.roomNumberSelect.value = '1';
+    // for (var i = 0; i < window.form.roomNumberSelect.children.length; i++) {
+    // if (window.form.roomNumberSelect.document.querySelector('option[selected]')) {
+      console.log(window.form.roomNumberSelect.querySelector('option[selected]').value);
+      // window.form.roomNumberSelect.value = window.form.roomNumberSelect.document.querySelector('option[selected]').value;
+    // }
+    // }
+    console.log(window.form.roomNumberSelect.children);
+    window.form.roomNumberSelect.addEventListener('change', window.form.onRoomNumberSelectChange);
+
     window.cardRender.closePopup();
-    var mapPins = document.querySelector('.map__pin');
+    var mapPins = document.querySelectorAll('.map__pin');
     for (var m = 1; m < mapPins.length; m++) {
       if (mapPins[m] !== null) {
         mapPins[m].remove();

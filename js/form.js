@@ -50,6 +50,7 @@
   window.form = {
     adForm: adForm,
     onRoomNumberSelectChange: onRoomNumberSelectChange,
-    onTypeSelectChange: onTypeSelectChange
+    onTypeSelectChange: onTypeSelectChange,
+    roomNumberSelect: roomNumberSelect
   };
 })();
