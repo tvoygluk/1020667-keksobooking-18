@@ -45,6 +45,7 @@
 
   timeInSelect.addEventListener('change', setTimeInEqualTimeOut);
   timeOutSelect.addEventListener('change', setTimeOutEqualTimeIn);
+  adForm.addEventListener('submit', window.backendAction.onSubmitForm);
 
   window.form = {
     adForm: adForm,

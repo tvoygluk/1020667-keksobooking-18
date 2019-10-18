@@ -2,7 +2,7 @@
 
 (function () {
   var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
-  var URL_SAVE = '';
+  var URL_SAVE = 'https://js.dump.academy/keksobooking';
   var RESPONSE_OK_CODE = 200;
   var TEN_SECOND = 10000;
   var REQUEST_TYPE_GET = 'GET';
