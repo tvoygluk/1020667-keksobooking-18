@@ -27,10 +27,14 @@
   var typeSelect = adForm.querySelector('#type');
   var priceInput = adForm.querySelector('#price');
 
-  var onTypeSelectChange = function () {
+  var setMinPrice = function () {
     var minPrice = window.cardRender.TYPES[typeSelect.value].min;
     priceInput.min = minPrice;
     priceInput.placeholder = minPrice;
+  };
+
+  var onTypeSelectChange = function () {
+    setMinPrice();
   };
   typeSelect.addEventListener('change', onTypeSelectChange);
 
@@ -51,6 +55,8 @@
     adForm: adForm,
     onRoomNumberSelectChange: onRoomNumberSelectChange,
     onTypeSelectChange: onTypeSelectChange,
-    roomNumberSelect: roomNumberSelect
+    roomNumberSelect: roomNumberSelect,
+    priceInput: priceInput,
+    setMinPrice: setMinPrice
   };
 })();
