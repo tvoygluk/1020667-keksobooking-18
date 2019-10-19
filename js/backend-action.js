@@ -66,34 +66,8 @@
   };
 
   var makePageDefault = function () {
-
-    var makeDefaultSelect = function (element) {
-      element.value = element.querySelector('option[selected]').value;
-    };
-    var allFormSelect = window.form.adForm.querySelectorAll('select');
-    allFormSelect.forEach(function (element) {
-      makeDefaultSelect(element);
-    });
-
-    var makeDefaultInput = function (element) {
-      if (element.value) {
-        element.value = null;
-      }
-    };
-
-    var formTitle = window.form.adForm.querySelector('#title');
-    makeDefaultInput(formTitle);
-
-    makeDefaultInput(window.form.priceInput);
+    window.form.adForm.reset();
     window.form.setMinPrice();
-
-    var formDescription = window.form.adForm.querySelector('#description');
-    makeDefaultInput(formDescription);
-
-    var feature = window.form.adForm.querySelectorAll('.feature__checkbox:checked');
-    feature.forEach(function (element) {
-      element.checked = false;
-    });
 
     window.cardRender.closePopup();
     var mapPins = document.querySelectorAll('.map__pin');
