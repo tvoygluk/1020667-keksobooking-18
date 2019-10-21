@@ -5,6 +5,7 @@
   var PIN_HEIGHT = 70;
   var PIN_WIDTH = 50;
   var ENTER_KEYCODE = 13;
+  var PINS_LENGTH = 5;
 
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var similarListElement = window.cardRender.map.querySelector('.map__pins');
@@ -41,9 +42,10 @@
   var addPinsToLayout = function (pins) {
     var fragment = document.createDocumentFragment();
 
-    for (var l = 0; l < pins.length; l++) {
-      fragment.appendChild(renderPin(pins[l]));
+    for (var i = 0; i < PINS_LENGTH; i++) {
+      fragment.appendChild(renderPin(pins[i]));
     }
+
     similarListElement.appendChild(fragment);
   };
 

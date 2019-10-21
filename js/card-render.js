@@ -82,11 +82,11 @@
     var features = cardElement.querySelector('.popup__features');
     features.innerHTML = '';
     if (pin.offer.features.length !== 0) {
-      for (var i = 0; i < pin.offer.features.length; i++) {
+      pin.offer.features.forEach(function (element) {
         var featuresElement = document.createElement('li');
-        featuresElement.className = ('popup__feature popup__feature--' + pin.offer.features[i]);
+        featuresElement.className = ('popup__feature popup__feature--' + element);
         features.appendChild(featuresElement);
-      }
+      });
     } else {
       features.classList.add('hidden');
     }
@@ -98,15 +98,15 @@
     var popupPhotos = cardElement.querySelector('.popup__photos');
     popupPhotos.innerHTML = '';
     if (pin.offer.photos.length !== 0) {
-      for (var j = 0; j < pin.offer.photos.length; j++) {
+      pin.offer.photos.forEach(function (element) {
         var photoElement = document.createElement('img');
-        photoElement.src = pin.offer.photos[j];
+        photoElement.src = element;
         photoElement.className = ('popup__photo');
         photoElement.width = 45;
         photoElement.height = 40;
         photoElement.alt = 'Фотография жилья';
         popupPhotos.appendChild(photoElement);
-      }
+      });
     } else {
       popupPhotos.classList.add('hidden');
     }
@@ -139,4 +139,3 @@
     bodyField: bodyField
   };
 })();
-

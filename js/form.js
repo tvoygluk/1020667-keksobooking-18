@@ -27,10 +27,14 @@
   var typeSelect = adForm.querySelector('#type');
   var priceInput = adForm.querySelector('#price');
 
-  var onTypeSelectChange = function () {
+  var setMinPrice = function () {
     var minPrice = window.cardRender.TYPES[typeSelect.value].min;
     priceInput.min = minPrice;
     priceInput.placeholder = minPrice;
+  };
+
+  var onTypeSelectChange = function () {
+    setMinPrice();
   };
   typeSelect.addEventListener('change', onTypeSelectChange);
 
@@ -45,10 +49,21 @@
 
   timeInSelect.addEventListener('change', setTimeInEqualTimeOut);
   timeOutSelect.addEventListener('change', setTimeOutEqualTimeIn);
+  adForm.addEventListener('submit', window.backendAction.onSubmitForm);
+
+  var onClickButtonReset = function () {
+    window.backendAction.makePageDefault();
+  };
+
+  var buttonReset = adForm.querySelector('.ad-form__reset');
+  buttonReset.addEventListener('click', onClickButtonReset);
 
   window.form = {
     adForm: adForm,
     onRoomNumberSelectChange: onRoomNumberSelectChange,
-    onTypeSelectChange: onTypeSelectChange
+    onTypeSelectChange: onTypeSelectChange,
+    roomNumberSelect: roomNumberSelect,
+    priceInput: priceInput,
+    setMinPrice: setMinPrice
   };
 })();

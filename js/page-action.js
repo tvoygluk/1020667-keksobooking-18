@@ -9,9 +9,9 @@
   var addressField = window.form.adForm.querySelector('#address');
 
   var toggleDisabled = function () {
-    for (var m = 0; m < fieldsets.length; m++) {
-      fieldsets[m].disabled = !fieldsets[m].disabled;
-    }
+    fieldsets.forEach(function (element) {
+      element.disabled = !element.disabled;
+    });
   };
   toggleDisabled();
 
@@ -38,22 +38,24 @@
     toggleDisabled();
     window.form.adForm.classList.remove('ad-form--disabled');
     window.cardRender.map.classList.remove('map--faded');
-    window.backend.load(window.backendRender.successHandler, window.backendRender.errorHandler);
-    // window.pinRender.addPinsToLayout();
+    window.backend.load(window.backendAction.successHandler, window.backendAction.errorHandler);
     setAddressValue();
     window.form.onRoomNumberSelectChange();
     window.form.onTypeSelectChange();
     mapPinMain.removeEventListener('mousedown', onMainPinMouseDown);
-    mapPinMain.removeEventListener('keyup', onMainPinKeyDown);
+    mapPinMain.removeEventListener('keydown', onMainPinKeyDown);
   };
 
   mapPinMain.addEventListener('mousedown', onMainPinMouseDown);
-  mapPinMain.addEventListener('keyup', onMainPinKeyDown);
+  mapPinMain.addEventListener('keydown', onMainPinKeyDown);
 
   window.pageAction = {
     mapPinMain: mapPinMain,
     setAddressValue: setAddressValue,
     MAIN_PIN_EXTRA_HEIGHT: MAIN_PIN_EXTRA_HEIGHT,
-    makePageActive: makePageActive
+    makePageActive: makePageActive,
+    toggleDisabled: toggleDisabled,
+    onMainPinMouseDown: onMainPinMouseDown,
+    onMainPinKeyDown: onMainPinKeyDown
   };
 })();
