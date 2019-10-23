@@ -1,21 +1,44 @@
 'use strict';
+
 (function () {
   var MAIN_PIN_POS_Y = 375;
   var MAIN_PIN_POS_X = 570;
 
+  var removeMapPins = function () {
+    var mapPins = document.querySelectorAll('.map__pin');
+    for (var m = 1; m < mapPins.length; m++) {
+      if (mapPins[m] !== null) {
+        mapPins[m].remove();
+      }
+    }
+  };
+
   var somePins = [];
+  var housingTypeValue;
 
   var updatePins = function () {
-    console.log(somePins);
     var someFilterPins = somePins.filter(function (el) {
-      console.log(el.offer.type === 'house');
-      var isHouse = el.offer.type === 'house';
+      var isHouse = el.offer.type === housingTypeValue;
       return isHouse;
     });
-    // somePins.forEach(function (el) {
-    //   console.log(el.offer.type);
-    // });
-    window.pinRender.addPinsToLayout(someFilterPins.concat(somePins));
+
+    var pinFilter = document.querySelector('.map__filters-container');
+    var typeFilter = pinFilter.querySelector('#housing-type');
+    var onTypeFilterSelectChange = function () {
+
+      housingTypeValue = typeFilter.value;
+      window.cardRender.closePopup();
+      removeMapPins();
+      updatePins();
+      typeFilter.removeEventListener('change', onTypeFilterSelectChange);
+    };
+
+    typeFilter.addEventListener('change', onTypeFilterSelectChange);
+    var withDoublePin = someFilterPins.concat(somePins);
+    var uniquePins = withDoublePin.filter(function (it, i) {
+      return withDoublePin.indexOf(it) === i;
+    });
+    window.pinRender.addPinsToLayout(uniquePins);
   };
 
   var successHandler = function (data) {
@@ -88,12 +111,7 @@
     window.form.setMinPrice();
 
     window.cardRender.closePopup();
-    var mapPins = document.querySelectorAll('.map__pin');
-    for (var m = 1; m < mapPins.length; m++) {
-      if (mapPins[m] !== null) {
-        mapPins[m].remove();
-      }
-    }
+    removeMapPins();
 
     window.pageAction.mapPinMain.style.top = MAIN_PIN_POS_Y + 'px';
     window.pageAction.mapPinMain.style.left = MAIN_PIN_POS_X + 'px';
