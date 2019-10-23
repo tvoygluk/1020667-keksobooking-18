@@ -70,7 +70,7 @@
       }
     };
 
-    document.addEventListener('click', onErrorClick);
+    someError.addEventListener('click', onErrorClick);
     window.cardRender.bodyField.addEventListener('keydown', onEscPress);
   };
 
