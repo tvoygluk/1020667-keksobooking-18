@@ -6,7 +6,16 @@
   var somePins = [];
 
   var updatePins = function () {
-    window.pinRender.addPinsToLayout(somePins);
+    console.log(somePins);
+    var someFilterPins = somePins.filter(function (el) {
+      console.log(el.offer.type === 'house');
+      var isHouse = el.offer.type === 'house';
+      return isHouse;
+    });
+    // somePins.forEach(function (el) {
+    //   console.log(el.offer.type);
+    // });
+    window.pinRender.addPinsToLayout(someFilterPins.concat(somePins));
   };
 
   var successHandler = function (data) {
