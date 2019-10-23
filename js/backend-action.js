@@ -3,7 +3,16 @@
   var MAIN_PIN_POS_Y = 375;
   var MAIN_PIN_POS_X = 570;
 
-  var successHandler = window.pinRender.addPinsToLayout;
+  var somePins = [];
+
+  var updatePins = function () {
+    window.pinRender.addPinsToLayout(somePins);
+  };
+
+  var successHandler = function (data) {
+    somePins = data;
+    updatePins();
+  };
 
   var addSomethingToLayout = function (something) {
     var fragment = document.createDocumentFragment();
