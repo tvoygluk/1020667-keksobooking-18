@@ -15,6 +15,9 @@
 
   var somePins = [];
   var housingTypeValue;
+  var pinFilter = document.querySelector('.map__filters-container');
+  var typeFilter = pinFilter.querySelector('#housing-type');
+  var mapFilters = pinFilter.querySelector('.map__filters');
 
   var updatePins = function () {
     var someFilterPins = somePins.filter(function (el) {
@@ -22,8 +25,7 @@
       return isHouse;
     });
 
-    var pinFilter = document.querySelector('.map__filters-container');
-    var typeFilter = pinFilter.querySelector('#housing-type');
+
     var onTypeFilterSelectChange = function () {
 
       housingTypeValue = typeFilter.value;
@@ -108,6 +110,7 @@
 
   var makePageDefault = function () {
     window.form.adForm.reset();
+    mapFilters.reset();
     window.form.setMinPrice();
 
     window.cardRender.closePopup();
