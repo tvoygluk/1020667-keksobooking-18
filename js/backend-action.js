@@ -14,10 +14,17 @@
   };
 
   var somePins = [];
+
   var housingTypeValue;
   var roomsValue;
   var guestsValue;
   var priceValue;
+  var wifiValue;
+  var dishwasherValue;
+  var parkingValue;
+  var washerValue;
+  var elevatorValue;
+  var conditionerValue;
 
   var getRank = function (el) {
     var rank = 0;
@@ -44,6 +51,24 @@
     if (pricePerNight === priceValue) {
       rank++;
     }
+    if (el.offer.features.includes(wifiValue)) {
+      rank++;
+    }
+    if (el.offer.features.includes(dishwasherValue)) {
+      rank++;
+    }
+    if (el.offer.features.includes(parkingValue)) {
+      rank++;
+    }
+    if (el.offer.features.includes(washerValue)) {
+      rank++;
+    }
+    if (el.offer.features.includes(elevatorValue)) {
+      rank++;
+    }
+    if (el.offer.features.includes(conditionerValue)) {
+      rank++;
+    }
     return rank;
   };
 
@@ -61,75 +86,137 @@
 
   var mapFilters = pinFilter.querySelector('.map__filters');
   var updatePins = function () {
-    // var someFilterPins = somePins.filter(function (el) {
-    //   var isHouse = el.offer.type === housingTypeValue;
-    //   return isHouse;
-    // });
     var someFilterPins = somePins.sort(function (left, right) {
       var rankDiff = getRank(right) - getRank(left);
       if (rankDiff === 0) {
         rankDiff = namesComparator(left.offer.address, right.offer.address);
       }
       return rankDiff;
-      // return getRank(right) - getRank(left);
     });
 
+    var toFreshPins = function () {
+      window.cardRender.closePopup();
+      removeMapPins();
+      updatePins();
+    };
 
-    // ------------------------------------------------------------------------------
     var typeFilter = pinFilter.querySelector('#housing-type');
     var onTypeFilterSelectChange = function () {
       housingTypeValue = typeFilter.value;
-
-      window.cardRender.closePopup();
-      removeMapPins();
-      updatePins();
-
+      toFreshPins();
       typeFilter.removeEventListener('change', onTypeFilterSelectChange);
     };
     typeFilter.addEventListener('change', onTypeFilterSelectChange);
-    // var withDoublePin = someFilterPins.concat(somePins);
-    // var uniquePins = withDoublePin.filter(function (it, i) {
-    //   return withDoublePin.indexOf(it) === i;
-    // });
-    // ------------------------------------------------------------------------------
+
     var roomsFilter = pinFilter.querySelector('#housing-rooms');
     var onRoomsFilterSelectChange = function () {
       roomsValue = roomsFilter.value;
-
-      window.cardRender.closePopup();
-      removeMapPins();
-      updatePins();
-
+      toFreshPins();
       roomsFilter.removeEventListener('change', onRoomsFilterSelectChange);
     };
     roomsFilter.addEventListener('change', onRoomsFilterSelectChange);
-    // ------------------------------------------------------------------------------
+
     var guestsFilter = pinFilter.querySelector('#housing-guests');
     var onGuestsFilterSelectChange = function () {
       guestsValue = guestsFilter.value;
-
-      window.cardRender.closePopup();
-      removeMapPins();
-      updatePins();
-
+      toFreshPins();
       guestsFilter.removeEventListener('change', onGuestsFilterSelectChange);
     };
     guestsFilter.addEventListener('change', onGuestsFilterSelectChange);
-    // ------------------------------------------------------------------------------
+
     var priceFilter = pinFilter.querySelector('#housing-price');
     var onPriceFilterSelectChange = function () {
       priceValue = priceFilter.value;
-
-      window.cardRender.closePopup();
-      removeMapPins();
-      updatePins();
-
+      toFreshPins();
       priceFilter.removeEventListener('change', onPriceFilterSelectChange);
     };
     priceFilter.addEventListener('change', onPriceFilterSelectChange);
-    // ------------------------------------------------------------------------------
+
+    var wifiFilter = pinFilter.querySelector('#filter-wifi');
+    var onWifiFilterCheckedChange = function () {
+      if (wifiFilter.checked) {
+        wifiValue = wifiFilter.value;
+      } else {
+        wifiValue = null;
+      }
+      toFreshPins();
+      wifiFilter.removeEventListener('change', onWifiFilterCheckedChange);
+    };
+    wifiFilter.addEventListener('change', onWifiFilterCheckedChange);
+
+    var dishwasherFilter = pinFilter.querySelector('#filter-dishwasher');
+    var onDishwasherFilterCheckedChange = function () {
+      if (dishwasherFilter.checked) {
+        dishwasherValue = dishwasherFilter.value;
+      } else {
+        dishwasherValue = null;
+      }
+
+      toFreshPins();
+
+      dishwasherFilter.removeEventListener('change', onDishwasherFilterCheckedChange);
+    };
+    dishwasherFilter.addEventListener('change', onDishwasherFilterCheckedChange);
+
+
+    var parkingFilter = pinFilter.querySelector('#filter-parking');
+    var onParkingFilterCheckedChange = function () {
+      if (parkingFilter.checked) {
+        parkingValue = parkingFilter.value;
+      } else {
+        parkingValue = null;
+      }
+
+      toFreshPins();
+
+      parkingFilter.removeEventListener('change', onParkingFilterCheckedChange);
+    };
+    parkingFilter.addEventListener('change', onParkingFilterCheckedChange);
+
+    var washerFilter = pinFilter.querySelector('#filter-washer');
+    var onWasherFilterCheckedChange = function () {
+      if (washerFilter.checked) {
+        washerValue = washerFilter.value;
+      } else {
+        washerValue = null;
+      }
+
+      toFreshPins();
+
+      washerFilter.removeEventListener('change', onWasherFilterCheckedChange);
+    };
+    washerFilter.addEventListener('change', onWasherFilterCheckedChange);
+
+    var elevatorFilter = pinFilter.querySelector('#filter-elevator');
+    var onElevatorFilterCheckedChange = function () {
+      if (elevatorFilter.checked) {
+        elevatorValue = elevatorFilter.value;
+      } else {
+        elevatorValue = null;
+      }
+
+      toFreshPins();
+
+      elevatorFilter.removeEventListener('change', onElevatorFilterCheckedChange);
+    };
+    elevatorFilter.addEventListener('change', onElevatorFilterCheckedChange);
+
+    var conditionerFilter = pinFilter.querySelector('#filter-conditioner');
+    var onConditionerFilterCheckedChange = function () {
+      if (conditionerFilter.checked) {
+        conditionerValue = conditionerFilter.value;
+      } else {
+        conditionerValue = null;
+      }
+
+      toFreshPins();
+
+      conditionerFilter.removeEventListener('change', onConditionerFilterCheckedChange);
+    };
+    conditionerFilter.addEventListener('change', onConditionerFilterCheckedChange);
 
     window.pinRender.addPinsToLayout(someFilterPins);
+    someFilterPins = [];
   };
 
   var successHandler = function (data) {
