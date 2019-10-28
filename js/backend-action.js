@@ -16,6 +16,8 @@
   var somePins = [];
   var housingTypeValue;
   var roomsValue;
+  var guestsValue;
+  var priceValue;
 
   var getRank = function (el) {
     var rank = 0;
@@ -25,9 +27,23 @@
     }
     if (String(el.offer.rooms) === roomsValue) {
       rank++;
-      // console.log(rank);
     }
-    // console.log(rank);
+    if (String(el.offer.guests) === guestsValue) {
+      rank++;
+    }
+    var pricePerNight = el.offer.price;
+    if (pricePerNight >= 0 && pricePerNight < 10000) {
+      pricePerNight = 'low';
+    } else if (pricePerNight >= 10000 && pricePerNight <= 50000) {
+      pricePerNight = 'middle';
+    } else if (pricePerNight > 50000) {
+      pricePerNight = 'high';
+    } else if (pricePerNight > 0) {
+      pricePerNight = 'any';
+    }
+    if (pricePerNight === priceValue) {
+      rank++;
+    }
     return rank;
   };
 
@@ -52,7 +68,7 @@
     var someFilterPins = somePins.sort(function (left, right) {
       var rankDiff = getRank(right) - getRank(left);
       if (rankDiff === 0) {
-        rankDiff = namesComparator(left.name, right.name);
+        rankDiff = namesComparator(left.offer.address, right.offer.address);
       }
       return rankDiff;
       // return getRank(right) - getRank(left);
@@ -67,8 +83,8 @@
       window.cardRender.closePopup();
       removeMapPins();
       updatePins();
-      typeFilter.removeEventListener('change', onTypeFilterSelectChange);
 
+      typeFilter.removeEventListener('change', onTypeFilterSelectChange);
     };
     typeFilter.addEventListener('change', onTypeFilterSelectChange);
     // var withDoublePin = someFilterPins.concat(somePins);
@@ -83,10 +99,34 @@
       window.cardRender.closePopup();
       removeMapPins();
       updatePins();
-      typeFilter.removeEventListener('change', onRoomsFilterSelectChange);
 
+      roomsFilter.removeEventListener('change', onRoomsFilterSelectChange);
     };
     roomsFilter.addEventListener('change', onRoomsFilterSelectChange);
+    // ------------------------------------------------------------------------------
+    var guestsFilter = pinFilter.querySelector('#housing-guests');
+    var onGuestsFilterSelectChange = function () {
+      guestsValue = guestsFilter.value;
+
+      window.cardRender.closePopup();
+      removeMapPins();
+      updatePins();
+
+      guestsFilter.removeEventListener('change', onGuestsFilterSelectChange);
+    };
+    guestsFilter.addEventListener('change', onGuestsFilterSelectChange);
+    // ------------------------------------------------------------------------------
+    var priceFilter = pinFilter.querySelector('#housing-price');
+    var onPriceFilterSelectChange = function () {
+      priceValue = priceFilter.value;
+
+      window.cardRender.closePopup();
+      removeMapPins();
+      updatePins();
+
+      priceFilter.removeEventListener('change', onPriceFilterSelectChange);
+    };
+    priceFilter.addEventListener('change', onPriceFilterSelectChange);
     // ------------------------------------------------------------------------------
 
     window.pinRender.addPinsToLayout(someFilterPins);
