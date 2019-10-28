@@ -1,9 +1,26 @@
 'use strict';
+(function () {
+  var DEBOUNCE_INTERVAL = 500; // ms
+
+  var debounce = function (cb) {
+    var lastTimeout = null;
+
+    return function () {
+      var parameters = arguments;
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(function () {
+        cb.apply(null, parameters);
+      }, DEBOUNCE_INTERVAL);
+    };
+  };
+  window.timer = {
+    debounce: debounce
+  };
+})();
 
 (function () {
-  var MAIN_PIN_POS_Y = 375;
-  var MAIN_PIN_POS_X = 570;
-
   var removeMapPins = function () {
     var mapPins = document.querySelectorAll('.map__pin');
     for (var m = 1; m < mapPins.length; m++) {
@@ -14,6 +31,29 @@
   };
 
   var somePins = [];
+
+  window.order = {
+    removeMapPins: removeMapPins,
+    somePins: somePins
+  };
+
+})();
+
+
+(function () {
+  var MAIN_PIN_POS_Y = 375;
+  var MAIN_PIN_POS_X = 570;
+
+  // var removeMapPins = function () {
+  //   var mapPins = document.querySelectorAll('.map__pin');
+  //   for (var m = 1; m < mapPins.length; m++) {
+  //     if (mapPins[m] !== null) {
+  //       mapPins[m].remove();
+  //     }
+  //   }
+  // };
+
+  // var somePins = [];
 
   var housingTypeValue;
   var roomsValue;
@@ -85,142 +125,124 @@
   var pinFilter = document.querySelector('.map__filters-container');
 
   var mapFilters = pinFilter.querySelector('.map__filters');
+  var typeFilter = pinFilter.querySelector('#housing-type');
+  var roomsFilter = pinFilter.querySelector('#housing-rooms');
+  var guestsFilter = pinFilter.querySelector('#housing-guests');
+  var priceFilter = pinFilter.querySelector('#housing-price');
+  var wifiFilter = pinFilter.querySelector('#filter-wifi');
+  var dishwasherFilter = pinFilter.querySelector('#filter-dishwasher');
+  var parkingFilter = pinFilter.querySelector('#filter-parking');
+  var washerFilter = pinFilter.querySelector('#filter-washer');
+  var elevatorFilter = pinFilter.querySelector('#filter-elevator');
+  var conditionerFilter = pinFilter.querySelector('#filter-conditioner');
+
+  var toFreshPins = function () {
+    window.cardRender.closePopup();
+    window.order.removeMapPins();
+    updatePins();
+  };
+
   var updatePins = function () {
-    var someFilterPins = somePins.sort(function (left, right) {
+    var someFilterPins = window.order.somePins.sort(function (left, right) {
       var rankDiff = getRank(right) - getRank(left);
       if (rankDiff === 0) {
         rankDiff = namesComparator(left.offer.address, right.offer.address);
       }
       return rankDiff;
     });
-
-    var toFreshPins = function () {
-      window.cardRender.closePopup();
-      removeMapPins();
-      updatePins();
-    };
-
-    var typeFilter = pinFilter.querySelector('#housing-type');
-    var onTypeFilterSelectChange = function () {
-      housingTypeValue = typeFilter.value;
-      toFreshPins();
-      typeFilter.removeEventListener('change', onTypeFilterSelectChange);
-    };
-    typeFilter.addEventListener('change', onTypeFilterSelectChange);
-
-    var roomsFilter = pinFilter.querySelector('#housing-rooms');
-    var onRoomsFilterSelectChange = function () {
-      roomsValue = roomsFilter.value;
-      toFreshPins();
-      roomsFilter.removeEventListener('change', onRoomsFilterSelectChange);
-    };
-    roomsFilter.addEventListener('change', onRoomsFilterSelectChange);
-
-    var guestsFilter = pinFilter.querySelector('#housing-guests');
-    var onGuestsFilterSelectChange = function () {
-      guestsValue = guestsFilter.value;
-      toFreshPins();
-      guestsFilter.removeEventListener('change', onGuestsFilterSelectChange);
-    };
-    guestsFilter.addEventListener('change', onGuestsFilterSelectChange);
-
-    var priceFilter = pinFilter.querySelector('#housing-price');
-    var onPriceFilterSelectChange = function () {
-      priceValue = priceFilter.value;
-      toFreshPins();
-      priceFilter.removeEventListener('change', onPriceFilterSelectChange);
-    };
-    priceFilter.addEventListener('change', onPriceFilterSelectChange);
-
-    var wifiFilter = pinFilter.querySelector('#filter-wifi');
-    var onWifiFilterCheckedChange = function () {
-      if (wifiFilter.checked) {
-        wifiValue = wifiFilter.value;
-      } else {
-        wifiValue = null;
-      }
-      toFreshPins();
-      wifiFilter.removeEventListener('change', onWifiFilterCheckedChange);
-    };
-    wifiFilter.addEventListener('change', onWifiFilterCheckedChange);
-
-    var dishwasherFilter = pinFilter.querySelector('#filter-dishwasher');
-    var onDishwasherFilterCheckedChange = function () {
-      if (dishwasherFilter.checked) {
-        dishwasherValue = dishwasherFilter.value;
-      } else {
-        dishwasherValue = null;
-      }
-
-      toFreshPins();
-
-      dishwasherFilter.removeEventListener('change', onDishwasherFilterCheckedChange);
-    };
-    dishwasherFilter.addEventListener('change', onDishwasherFilterCheckedChange);
-
-
-    var parkingFilter = pinFilter.querySelector('#filter-parking');
-    var onParkingFilterCheckedChange = function () {
-      if (parkingFilter.checked) {
-        parkingValue = parkingFilter.value;
-      } else {
-        parkingValue = null;
-      }
-
-      toFreshPins();
-
-      parkingFilter.removeEventListener('change', onParkingFilterCheckedChange);
-    };
-    parkingFilter.addEventListener('change', onParkingFilterCheckedChange);
-
-    var washerFilter = pinFilter.querySelector('#filter-washer');
-    var onWasherFilterCheckedChange = function () {
-      if (washerFilter.checked) {
-        washerValue = washerFilter.value;
-      } else {
-        washerValue = null;
-      }
-
-      toFreshPins();
-
-      washerFilter.removeEventListener('change', onWasherFilterCheckedChange);
-    };
-    washerFilter.addEventListener('change', onWasherFilterCheckedChange);
-
-    var elevatorFilter = pinFilter.querySelector('#filter-elevator');
-    var onElevatorFilterCheckedChange = function () {
-      if (elevatorFilter.checked) {
-        elevatorValue = elevatorFilter.value;
-      } else {
-        elevatorValue = null;
-      }
-
-      toFreshPins();
-
-      elevatorFilter.removeEventListener('change', onElevatorFilterCheckedChange);
-    };
-    elevatorFilter.addEventListener('change', onElevatorFilterCheckedChange);
-
-    var conditionerFilter = pinFilter.querySelector('#filter-conditioner');
-    var onConditionerFilterCheckedChange = function () {
-      if (conditionerFilter.checked) {
-        conditionerValue = conditionerFilter.value;
-      } else {
-        conditionerValue = null;
-      }
-
-      toFreshPins();
-
-      conditionerFilter.removeEventListener('change', onConditionerFilterCheckedChange);
-    };
-    conditionerFilter.addEventListener('change', onConditionerFilterCheckedChange);
-
     window.pinRender.addPinsToLayout(someFilterPins);
-    someFilterPins = [];
   };
+  var onTypeFilterSelectChange = window.timer.debounce(function () {
+    housingTypeValue = typeFilter.value;
+    toFreshPins();
+  });
+  typeFilter.addEventListener('change', onTypeFilterSelectChange);
 
+  var onRoomsFilterSelectChange = window.timer.debounce(function () {
+    roomsValue = roomsFilter.value;
+    toFreshPins();
+  });
+  roomsFilter.addEventListener('change', onRoomsFilterSelectChange);
+
+  var onGuestsFilterSelectChange = window.timer.debounce(function () {
+    guestsValue = guestsFilter.value;
+    toFreshPins();
+  });
+  guestsFilter.addEventListener('change', onGuestsFilterSelectChange);
+
+  var onPriceFilterSelectChange = window.timer.debounce(function () {
+    priceValue = priceFilter.value;
+    toFreshPins();
+  });
+  priceFilter.addEventListener('change', onPriceFilterSelectChange);
+
+  var onWifiFilterCheckedChange = window.timer.debounce(function () {
+    if (wifiFilter.checked) {
+      wifiValue = wifiFilter.value;
+    } else {
+      wifiValue = null;
+    }
+    toFreshPins();
+  });
+  wifiFilter.addEventListener('change', onWifiFilterCheckedChange);
+
+  var onDishwasherFilterCheckedChange = window.timer.debounce(function () {
+    if (dishwasherFilter.checked) {
+      dishwasherValue = dishwasherFilter.value;
+    } else {
+      dishwasherValue = null;
+    }
+    toFreshPins();
+  });
+  dishwasherFilter.addEventListener('change', onDishwasherFilterCheckedChange);
+
+  var onParkingFilterCheckedChange = window.timer.debounce(function () {
+    if (parkingFilter.checked) {
+      parkingValue = parkingFilter.value;
+    } else {
+      parkingValue = null;
+    }
+    toFreshPins();
+  });
+  parkingFilter.addEventListener('change', onParkingFilterCheckedChange);
+
+  var onWasherFilterCheckedChange = window.timer.debounce(function () {
+    if (washerFilter.checked) {
+      washerValue = washerFilter.value;
+    } else {
+      washerValue = null;
+    }
+    toFreshPins();
+  });
+  washerFilter.addEventListener('change', onWasherFilterCheckedChange);
+
+  var onElevatorFilterCheckedChange = window.timer.debounce(function () {
+    if (elevatorFilter.checked) {
+      elevatorValue = elevatorFilter.value;
+    } else {
+      elevatorValue = null;
+    }
+    toFreshPins();
+  });
+  elevatorFilter.addEventListener('change', onElevatorFilterCheckedChange);
+
+  var onConditionerFilterCheckedChange = window.timer.debounce(function () {
+    if (conditionerFilter.checked) {
+      conditionerValue = conditionerFilter.value;
+    } else {
+      conditionerValue = null;
+    }
+    toFreshPins();
+  });
+  conditionerFilter.addEventListener('change', onConditionerFilterCheckedChange);
+
+
+
+
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   var successHandler = function (data) {
-    somePins = data;
+    window.order.somePins = data;
     updatePins();
   };
 
@@ -290,7 +312,7 @@
     window.form.setMinPrice();
 
     window.cardRender.closePopup();
-    removeMapPins();
+    window.order.removeMapPins();
 
     window.pageAction.mapPinMain.style.top = MAIN_PIN_POS_Y + 'px';
     window.pageAction.mapPinMain.style.left = MAIN_PIN_POS_X + 'px';
