@@ -15,32 +15,81 @@
 
   var somePins = [];
   var housingTypeValue;
-  var pinFilter = document.querySelector('.map__filters-container');
-  var typeFilter = pinFilter.querySelector('#housing-type');
-  var mapFilters = pinFilter.querySelector('.map__filters');
+  var roomsValue;
 
+  var getRank = function (el) {
+    var rank = 0;
+
+    if (el.offer.type === housingTypeValue) {
+      rank++;
+    }
+    if (String(el.offer.rooms) === roomsValue) {
+      rank++;
+      // console.log(rank);
+    }
+    // console.log(rank);
+    return rank;
+  };
+
+  var namesComparator = function (left, right) {
+    if (left > right) {
+      return 1;
+    } else if (left < right) {
+      return -1;
+    } else {
+      return 0;
+    }
+  };
+
+  var pinFilter = document.querySelector('.map__filters-container');
+
+  var mapFilters = pinFilter.querySelector('.map__filters');
   var updatePins = function () {
-    var someFilterPins = somePins.filter(function (el) {
-      var isHouse = el.offer.type === housingTypeValue;
-      return isHouse;
+    // var someFilterPins = somePins.filter(function (el) {
+    //   var isHouse = el.offer.type === housingTypeValue;
+    //   return isHouse;
+    // });
+    var someFilterPins = somePins.sort(function (left, right) {
+      var rankDiff = getRank(right) - getRank(left);
+      if (rankDiff === 0) {
+        rankDiff = namesComparator(left.name, right.name);
+      }
+      return rankDiff;
+      // return getRank(right) - getRank(left);
     });
 
 
+    // ------------------------------------------------------------------------------
+    var typeFilter = pinFilter.querySelector('#housing-type');
     var onTypeFilterSelectChange = function () {
-
       housingTypeValue = typeFilter.value;
+
       window.cardRender.closePopup();
       removeMapPins();
       updatePins();
       typeFilter.removeEventListener('change', onTypeFilterSelectChange);
-    };
 
+    };
     typeFilter.addEventListener('change', onTypeFilterSelectChange);
-    var withDoublePin = someFilterPins.concat(somePins);
-    var uniquePins = withDoublePin.filter(function (it, i) {
-      return withDoublePin.indexOf(it) === i;
-    });
-    window.pinRender.addPinsToLayout(uniquePins);
+    // var withDoublePin = someFilterPins.concat(somePins);
+    // var uniquePins = withDoublePin.filter(function (it, i) {
+    //   return withDoublePin.indexOf(it) === i;
+    // });
+    // ------------------------------------------------------------------------------
+    var roomsFilter = pinFilter.querySelector('#housing-rooms');
+    var onRoomsFilterSelectChange = function () {
+      roomsValue = roomsFilter.value;
+
+      window.cardRender.closePopup();
+      removeMapPins();
+      updatePins();
+      typeFilter.removeEventListener('change', onRoomsFilterSelectChange);
+
+    };
+    roomsFilter.addEventListener('change', onRoomsFilterSelectChange);
+    // ------------------------------------------------------------------------------
+
+    window.pinRender.addPinsToLayout(someFilterPins);
   };
 
   var successHandler = function (data) {
