@@ -19,6 +19,7 @@
   var makeSuccessMessage = function () {
     var successTemplate = document.querySelector('#success').content.querySelector('.success');
     var someSuccess = successTemplate.cloneNode(true);
+    var successMessage = someSuccess.querySelector('.success__message');
     addSomethingToLayout(someSuccess);
 
     var closeSuccess = function () {
@@ -27,8 +28,10 @@
       }
     };
 
-    var onSuccessClick = function () {
-      closeSuccess();
+    var onSuccessClick = function (evt) {
+      if (evt.target !== successMessage) {
+        closeSuccess();
+      }
     };
 
     var onEscPress = function (evt) {
@@ -55,8 +58,10 @@
       }
     };
 
-    var onErrorClick = function () {
-      closeErrorButton();
+    var onErrorClick = function (evt) {
+      if (evt.target !== errorMessage) {
+        closeErrorButton();
+      }
     };
 
     var onEscPress = function (evt) {
