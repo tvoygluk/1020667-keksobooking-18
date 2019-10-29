@@ -81,7 +81,6 @@
 
   var pinFilter = document.querySelector('.map__filters-container');
 
-
   var typeFilter = pinFilter.querySelector('#housing-type');
   var roomsFilter = pinFilter.querySelector('#housing-rooms');
   var guestsFilter = pinFilter.querySelector('#housing-guests');
@@ -135,61 +134,37 @@
   priceFilter.addEventListener('change', onPriceFilterSelectChange);
 
   var onWifiFilterCheckedChange = window.timer.debounce(function () {
-    if (wifiFilter.checked) {
-      wifiValue = wifiFilter.value;
-    } else {
-      wifiValue = null;
-    }
+    wifiValue = wifiFilter.checked ? wifiFilter.value : null;
     toFreshPins();
   });
   wifiFilter.addEventListener('change', onWifiFilterCheckedChange);
 
   var onDishwasherFilterCheckedChange = window.timer.debounce(function () {
-    if (dishwasherFilter.checked) {
-      dishwasherValue = dishwasherFilter.value;
-    } else {
-      dishwasherValue = null;
-    }
+    dishwasherValue = dishwasherFilter.checked ? dishwasherFilter.value : null;
     toFreshPins();
   });
   dishwasherFilter.addEventListener('change', onDishwasherFilterCheckedChange);
 
   var onParkingFilterCheckedChange = window.timer.debounce(function () {
-    if (parkingFilter.checked) {
-      parkingValue = parkingFilter.value;
-    } else {
-      parkingValue = null;
-    }
+    parkingValue = parkingFilter.checked ? parkingFilter.value : null;
     toFreshPins();
   });
   parkingFilter.addEventListener('change', onParkingFilterCheckedChange);
 
   var onWasherFilterCheckedChange = window.timer.debounce(function () {
-    if (washerFilter.checked) {
-      washerValue = washerFilter.value;
-    } else {
-      washerValue = null;
-    }
+    washerValue = washerFilter.checked ? washerFilter.value : null;
     toFreshPins();
   });
   washerFilter.addEventListener('change', onWasherFilterCheckedChange);
 
   var onElevatorFilterCheckedChange = window.timer.debounce(function () {
-    if (elevatorFilter.checked) {
-      elevatorValue = elevatorFilter.value;
-    } else {
-      elevatorValue = null;
-    }
+    elevatorValue = elevatorFilter.checked ? elevatorFilter.value : null;
     toFreshPins();
   });
   elevatorFilter.addEventListener('change', onElevatorFilterCheckedChange);
 
   var onConditionerFilterCheckedChange = window.timer.debounce(function () {
-    if (conditionerFilter.checked) {
-      conditionerValue = conditionerFilter.value;
-    } else {
-      conditionerValue = null;
-    }
+    conditionerValue = conditionerFilter.checked ? conditionerFilter.value : null;
     toFreshPins();
   });
   conditionerFilter.addEventListener('change', onConditionerFilterCheckedChange);
