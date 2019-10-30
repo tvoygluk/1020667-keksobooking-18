@@ -1,12 +1,11 @@
 'use strict';
 
-// Активация страницы page-action.js
 (function () {
   var MAIN_PIN_EXTRA_HEIGHT = 16;
 
-  var fieldsets = window.form.adForm.querySelectorAll('fieldset');
+  var fieldsets = window.form.fieldsWrapper.querySelectorAll('fieldset');
   var mapPinMain = document.querySelector('.map__pin--main');
-  var addressField = window.form.adForm.querySelector('#address');
+  var addressField = window.form.fieldsWrapper.querySelector('#address');
 
   var toggleDisabled = function () {
     fieldsets.forEach(function (element) {
@@ -16,10 +15,10 @@
   toggleDisabled();
 
   var setAddressValue = function (element) {
-    var el = element || mapPinMain;
-    var mapPinMainXCenter = Math.floor(parseInt(el.style.left, 10) + el.offsetWidth / 2);
-    var mapPinMainYTop = parseInt(el.style.top, 10);
-    addressField.value = (window.cardRender.map.classList.contains('map--faded')) ? mapPinMainXCenter + ', ' + Math.floor(mapPinMainYTop + el.offsetHeight / 2) : mapPinMainXCenter + ', ' + Math.floor(mapPinMainYTop + el.offsetHeight + MAIN_PIN_EXTRA_HEIGHT);
+    var myElement = element || mapPinMain;
+    var mapPinMainXCenter = Math.floor(parseInt(myElement.style.left, 10) + myElement.offsetWidth / 2);
+    var mapPinMainYTop = parseInt(myElement.style.top, 10);
+    addressField.value = (window.cardRender.map.classList.contains('map--faded')) ? mapPinMainXCenter + ', ' + Math.floor(mapPinMainYTop + myElement.offsetHeight / 2) : mapPinMainXCenter + ', ' + Math.floor(mapPinMainYTop + myElement.offsetHeight + MAIN_PIN_EXTRA_HEIGHT);
   };
 
   setAddressValue();
@@ -36,7 +35,7 @@
 
   var makePageActive = function () {
     toggleDisabled();
-    window.form.adForm.classList.remove('ad-form--disabled');
+    window.form.fieldsWrapper.classList.remove('ad-form--disabled');
     window.cardRender.map.classList.remove('map--faded');
     window.backend.load(window.backendAction.successHandler, window.backendAction.errorHandler);
     setAddressValue();
@@ -50,9 +49,9 @@
   mapPinMain.addEventListener('keydown', onMainPinKeyDown);
 
   window.pageAction = {
+    MAIN_PIN_EXTRA_HEIGHT: MAIN_PIN_EXTRA_HEIGHT,
     mapPinMain: mapPinMain,
     setAddressValue: setAddressValue,
-    MAIN_PIN_EXTRA_HEIGHT: MAIN_PIN_EXTRA_HEIGHT,
     makePageActive: makePageActive,
     toggleDisabled: toggleDisabled,
     onMainPinMouseDown: onMainPinMouseDown,

@@ -76,7 +76,7 @@
   };
 
   var makePageDefault = function () {
-    window.form.adForm.reset();
+    window.form.fieldsWrapper.reset();
     mapFilters.reset();
     window.form.setMinPrice();
     window.cardRender.closePopup();
@@ -85,7 +85,7 @@
     window.pageAction.mapPinMain.style.top = MAIN_PIN_POS_Y + 'px';
     window.pageAction.mapPinMain.style.left = MAIN_PIN_POS_X + 'px';
     window.pageAction.toggleDisabled();
-    window.form.adForm.classList.add('ad-form--disabled');
+    window.form.fieldsWrapper.classList.add('ad-form--disabled');
     window.cardRender.map.classList.add('map--faded');
     window.pageAction.setAddressValue(window.pageAction.mapPinMain);
     window.pageAction.mapPinMain.addEventListener('mousedown', window.pageAction.onMainPinMouseDown);
@@ -97,15 +97,15 @@
     makeSuccessMessage();
   };
 
-  var onSubmitForm = function (evt) {
-    window.backend.save(sendData, errorHandler, new FormData(window.form.adForm));
+  var onFormSubmit = function (evt) {
+    window.backend.save(sendData, errorHandler, new FormData(window.form.fieldsWrapper));
     evt.preventDefault();
   };
 
   window.backendAction = {
     successHandler: successHandler,
     errorHandler: errorHandler,
-    onSubmitForm: onSubmitForm,
+    onFormSubmit: onFormSubmit,
     makePageDefault: makePageDefault
   };
 })();

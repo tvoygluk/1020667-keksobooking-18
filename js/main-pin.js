@@ -1,6 +1,5 @@
 'use strict';
 
-// Перетаскивание главного пина
 (function () {
   var TOP_LIMIT_POSITION_PIN = 130;
   var BOTTOM_LIMIT_POSITION_PIN = 630;

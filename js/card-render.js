@@ -1,6 +1,5 @@
 'use strict';
 
-// Рендеринг карточек card-render.js
 (function () {
   var TYPES = {
     'palace': {
@@ -50,20 +49,20 @@
   };
 
   var renderCard = function (pin) {
-    var cardElement = cardTemplate.cloneNode(true);
+    var card = cardTemplate.cloneNode(true);
 
-    var popupTitle = cardElement.querySelector('.popup__title');
-    var popupTextAdress = cardElement.querySelector('.popup__text--address');
-    var popupTextPrice = cardElement.querySelector('.popup__text--price');
-    var popupType = cardElement.querySelector('.popup__type');
-    var popupTextCapacity = cardElement.querySelector('.popup__text--capacity');
-    var popupTextTime = cardElement.querySelector('.popup__text--time');
+    var popupTitle = card.querySelector('.popup__title');
+    var popupTextAdress = card.querySelector('.popup__text--address');
+    var popupTextPrice = card.querySelector('.popup__text--price');
+    var popupType = card.querySelector('.popup__type');
+    var popupTextCapacity = card.querySelector('.popup__text--capacity');
+    var popupTextTime = card.querySelector('.popup__text--time');
 
-    var checkExist = function (elem, val) {
-      if (elem) {
-        elem.textContent = val;
+    var checkExist = function (element, value) {
+      if (element) {
+        element.textContent = value;
       } else {
-        elem.classList.add('hidden');
+        element.classList.add('hidden');
       }
     };
     checkExist(popupTitle, pin.offer.title);
@@ -79,39 +78,39 @@
 
     checkExist(popupTextTime, 'Заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout);
 
-    var features = cardElement.querySelector('.popup__features');
-    features.innerHTML = '';
+    var popupFeatures = card.querySelector('.popup__features');
+    popupFeatures.innerHTML = '';
     if (pin.offer.features.length !== 0) {
       pin.offer.features.forEach(function (element) {
-        var featuresElement = document.createElement('li');
-        featuresElement.className = ('popup__feature popup__feature--' + element);
-        features.appendChild(featuresElement);
+        var cardFeatures = document.createElement('li');
+        cardFeatures.className = ('popup__feature popup__feature--' + element);
+        popupFeatures.appendChild(cardFeatures);
       });
     } else {
-      features.classList.add('hidden');
+      popupFeatures.classList.add('hidden');
     }
 
-    var popupDescription = cardElement.querySelector('.popup__description');
+    var popupDescription = card.querySelector('.popup__description');
     checkExist(popupDescription, pin.offer.description);
 
 
-    var popupPhotos = cardElement.querySelector('.popup__photos');
+    var popupPhotos = card.querySelector('.popup__photos');
     popupPhotos.innerHTML = '';
     if (pin.offer.photos.length !== 0) {
       pin.offer.photos.forEach(function (element) {
-        var photoElement = document.createElement('img');
-        photoElement.src = element;
-        photoElement.className = ('popup__photo');
-        photoElement.width = 45;
-        photoElement.height = 40;
-        photoElement.alt = 'Фотография жилья';
-        popupPhotos.appendChild(photoElement);
+        var cardPhoto = document.createElement('img');
+        cardPhoto.src = element;
+        cardPhoto.className = ('popup__photo');
+        cardPhoto.width = 45;
+        cardPhoto.height = 40;
+        cardPhoto.alt = 'Фотография жилья';
+        popupPhotos.appendChild(cardPhoto);
       });
     } else {
       popupPhotos.classList.add('hidden');
     }
 
-    var popupAvatar = cardElement.querySelector('.popup__avatar');
+    var popupAvatar = card.querySelector('.popup__avatar');
     popupAvatar.src = pin.author.avatar;
 
     var onClosePopupClick = function () {
@@ -123,11 +122,11 @@
         bodyField.removeEventListener('keydown', onPopupEscPress);
       }
     };
-    var closePopupElement = cardElement.querySelector('.popup__close');
+    var closePopupElement = card.querySelector('.popup__close');
     closePopupElement.addEventListener('click', onClosePopupClick);
     bodyField.addEventListener('keydown', onPopupEscPress);
 
-    return cardElement;
+    return card;
   };
 
   window.cardRender = {

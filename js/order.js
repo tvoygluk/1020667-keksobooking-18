@@ -2,12 +2,12 @@
 
 (function () {
   var removeMapPins = function () {
-    var mapPins = document.querySelectorAll('.map__pin');
-    for (var m = 1; m < mapPins.length; m++) {
-      if (mapPins[m] !== null) {
-        mapPins[m].remove();
+    var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    mapPins.forEach(function (element) {
+      if (element !== null) {
+        element.remove();
       }
-    }
+    });
   };
 
   var somePins = [];
@@ -23,19 +23,19 @@
   var elevatorValue;
   var conditionerValue;
 
-  var getRank = function (el) {
+  var getRank = function (myObject) {
     var rank = 0;
 
-    if (el.offer.type === housingTypeValue) {
+    if (myObject.offer.type === housingTypeValue) {
       rank++;
     }
-    if (String(el.offer.rooms) === roomsValue) {
+    if (String(myObject.offer.rooms) === roomsValue) {
       rank++;
     }
-    if (String(el.offer.guests) === guestsValue) {
+    if (String(myObject.offer.guests) === guestsValue) {
       rank++;
     }
-    var pricePerNight = el.offer.price;
+    var pricePerNight = myObject.offer.price;
     if (pricePerNight >= 0 && pricePerNight < 10000) {
       pricePerNight = 'low';
     } else if (pricePerNight >= 10000 && pricePerNight <= 50000) {
@@ -48,22 +48,22 @@
     if (pricePerNight === priceValue) {
       rank++;
     }
-    if (el.offer.features.includes(wifiValue)) {
+    if (myObject.offer.features.includes(wifiValue)) {
       rank++;
     }
-    if (el.offer.features.includes(dishwasherValue)) {
+    if (myObject.offer.features.includes(dishwasherValue)) {
       rank++;
     }
-    if (el.offer.features.includes(parkingValue)) {
+    if (myObject.offer.features.includes(parkingValue)) {
       rank++;
     }
-    if (el.offer.features.includes(washerValue)) {
+    if (myObject.offer.features.includes(washerValue)) {
       rank++;
     }
-    if (el.offer.features.includes(elevatorValue)) {
+    if (myObject.offer.features.includes(elevatorValue)) {
       rank++;
     }
-    if (el.offer.features.includes(conditionerValue)) {
+    if (myObject.offer.features.includes(conditionerValue)) {
       rank++;
     }
     return rank;
@@ -169,12 +169,10 @@
   });
   conditionerFilter.addEventListener('change', onConditionerFilterCheckedChange);
 
-
   window.order = {
     removeMapPins: removeMapPins,
     somePins: somePins,
     updatePins: updatePins,
     pinFilter: pinFilter
   };
-
 })();

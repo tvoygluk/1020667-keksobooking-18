@@ -1,6 +1,5 @@
 'use strict';
 
-// Рендер пинов pin-render.js
 (function () {
   var PIN_HEIGHT = 70;
   var PIN_WIDTH = 50;
