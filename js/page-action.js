@@ -37,7 +37,7 @@
     toggleDisabled();
     window.form.fieldsWrapper.classList.remove('ad-form--disabled');
     window.cardRender.map.classList.remove('map--faded');
-    window.backend.load(window.backendAction.successHandler, window.backendAction.errorHandler);
+    window.backend.load(window.backendAction.successEvent, window.backendAction.errorEvent);
     setAddressValue();
     window.form.onRoomNumberSelectChange();
     window.form.onTypeSelectChange();

@@ -5,7 +5,7 @@
   var MAIN_PIN_POS_X = 570;
   var mapFilters = window.order.pinFilter.querySelector('.map__filters');
 
-  var successHandler = function (data) {
+  var successEvent = function (data) {
     window.order.somePins = data;
     window.order.updatePins();
   };
@@ -44,7 +44,7 @@
     window.cardRender.bodyField.addEventListener('keydown', onEscPress);
   };
 
-  var errorHandler = function (message) {
+  var errorEvent = function (message) {
     var errorTemplate = document.querySelector('#error').content.querySelector('.error');
     var someError = errorTemplate.cloneNode(true);
     var errorMessage = someError.querySelector('.error__message');
@@ -98,13 +98,13 @@
   };
 
   var onFormSubmit = function (evt) {
-    window.backend.save(sendData, errorHandler, new FormData(window.form.fieldsWrapper));
+    window.backend.save(sendData, errorEvent, new FormData(window.form.fieldsWrapper));
     evt.preventDefault();
   };
 
   window.backendAction = {
-    successHandler: successHandler,
-    errorHandler: errorHandler,
+    successEvent: successEvent,
+    errorEvent: errorEvent,
     onFormSubmit: onFormSubmit,
     makePageDefault: makePageDefault
   };
