@@ -10,97 +10,64 @@
     });
   };
 
+  var pricePerNight = {
+    'low': {
+      start: 0,
+      end: 10000
+    },
+    'middle': {
+      start: 10000,
+      end: 50000
+    },
+    'high': {
+      start: 50000,
+      end: Infinity
+    }
+  };
+
+  var filterRules = {
+    'housing-type': function (data, filter) {
+      return data.offer.type === filter.value;
+    },
+    'housing-price': function (data, filter) {
+      return data.offer.price >= pricePerNight[filter.value].start && data.offer.price < pricePerNight[filter.value].end;
+    },
+    'housing-rooms': function (data, filter) {
+      return String(data.offer.rooms) === filter.value;
+    },
+    'housing-guests': function (data, filter) {
+      return String(data.offer.guests) === filter.value;
+    },
+    'housing-features': function (data, filter) {
+      var filterChecked = Array.from(filter.querySelectorAll('input[type=checkbox]:checked'));
+
+      return filterChecked.every(function (myObject) {
+        return data.offer.features.some(function (feature) {
+          return feature === myObject.value;
+        });
+      });
+    }
+  };
+
   var somePins = [];
 
-  var housingTypeValue;
-  var roomsValue;
-  var guestsValue;
-  var priceValue;
-  var wifiValue;
-  var dishwasherValue;
-  var parkingValue;
-  var washerValue;
-  var elevatorValue;
-  var conditionerValue;
+  var pinFilter = window.cardRender.map.querySelector('.map__filters');
 
-  var getRank = function (myObject) {
-    var rank = 0;
-
-    if (myObject.offer.type === housingTypeValue) {
-      rank++;
-    }
-    if (String(myObject.offer.rooms) === roomsValue) {
-      rank++;
-    }
-    if (String(myObject.offer.guests) === guestsValue) {
-      rank++;
-    }
-    var pricePerNight = myObject.offer.price;
-    if (pricePerNight >= 0 && pricePerNight < 10000) {
-      pricePerNight = 'low';
-    } else if (pricePerNight >= 10000 && pricePerNight <= 50000) {
-      pricePerNight = 'middle';
-    } else if (pricePerNight > 50000) {
-      pricePerNight = 'high';
-    } else if (pricePerNight > 0) {
-      pricePerNight = 'any';
-    }
-    if (pricePerNight === priceValue) {
-      rank++;
-    }
-    if (myObject.offer.features.includes(wifiValue)) {
-      rank++;
-    }
-    if (myObject.offer.features.includes(dishwasherValue)) {
-      rank++;
-    }
-    if (myObject.offer.features.includes(parkingValue)) {
-      rank++;
-    }
-    if (myObject.offer.features.includes(washerValue)) {
-      rank++;
-    }
-    if (myObject.offer.features.includes(elevatorValue)) {
-      rank++;
-    }
-    if (myObject.offer.features.includes(conditionerValue)) {
-      rank++;
-    }
-    return rank;
+  var getFilterData = function (data, elements) {
+    return data.filter(function (item) {
+      return elements.every(function (filter) {
+        return (filter.value === 'any') ? true : filterRules[filter.id](item, filter);
+      });
+    });
   };
 
-  var namesComparator = function (left, right) {
-    if (left > right) {
-      return 1;
-    } else if (left < right) {
-      return -1;
-    } else {
-      return 0;
-    }
-  };
-
-  var pinFilter = document.querySelector('.map__filters-container');
-
-  var typeFilter = pinFilter.querySelector('#housing-type');
-  var roomsFilter = pinFilter.querySelector('#housing-rooms');
-  var guestsFilter = pinFilter.querySelector('#housing-guests');
-  var priceFilter = pinFilter.querySelector('#housing-price');
-  var wifiFilter = pinFilter.querySelector('#filter-wifi');
-  var dishwasherFilter = pinFilter.querySelector('#filter-dishwasher');
-  var parkingFilter = pinFilter.querySelector('#filter-parking');
-  var washerFilter = pinFilter.querySelector('#filter-washer');
-  var elevatorFilter = pinFilter.querySelector('#filter-elevator');
-  var conditionerFilter = pinFilter.querySelector('#filter-conditioner');
+  var filterElements = [];
 
   var updatePins = function () {
-    var someFilterPins = window.order.somePins.sort(function (left, right) {
-      var rankDiff = getRank(right) - getRank(left);
-      if (rankDiff === 0) {
-        rankDiff = namesComparator(left.offer.address, right.offer.address);
-      }
-      return rankDiff;
-    });
-    window.pinRender.addPinsToLayout(someFilterPins);
+    var someFilterPins = window.order.somePins;
+    window.order.filterElements = Array.from(window.order.pinFilter.children);
+
+    window.pinRender.addPinsToLayout(getFilterData(someFilterPins, window.order.filterElements));
   };
 
   var toFreshPins = function () {
@@ -109,70 +76,17 @@
     updatePins();
   };
 
-  var onTypeFilterSelectChange = window.timer.debounce(function () {
-    housingTypeValue = typeFilter.value;
+  var onPinFilterChange = window.timer.debounce(function () {
     toFreshPins();
   });
-  typeFilter.addEventListener('change', onTypeFilterSelectChange);
 
-  var onRoomsFilterSelectChange = window.timer.debounce(function () {
-    roomsValue = roomsFilter.value;
-    toFreshPins();
-  });
-  roomsFilter.addEventListener('change', onRoomsFilterSelectChange);
-
-  var onGuestsFilterSelectChange = window.timer.debounce(function () {
-    guestsValue = guestsFilter.value;
-    toFreshPins();
-  });
-  guestsFilter.addEventListener('change', onGuestsFilterSelectChange);
-
-  var onPriceFilterSelectChange = window.timer.debounce(function () {
-    priceValue = priceFilter.value;
-    toFreshPins();
-  });
-  priceFilter.addEventListener('change', onPriceFilterSelectChange);
-
-  var onWifiFilterCheckedChange = window.timer.debounce(function () {
-    wifiValue = wifiFilter.checked ? wifiFilter.value : null;
-    toFreshPins();
-  });
-  wifiFilter.addEventListener('change', onWifiFilterCheckedChange);
-
-  var onDishwasherFilterCheckedChange = window.timer.debounce(function () {
-    dishwasherValue = dishwasherFilter.checked ? dishwasherFilter.value : null;
-    toFreshPins();
-  });
-  dishwasherFilter.addEventListener('change', onDishwasherFilterCheckedChange);
-
-  var onParkingFilterCheckedChange = window.timer.debounce(function () {
-    parkingValue = parkingFilter.checked ? parkingFilter.value : null;
-    toFreshPins();
-  });
-  parkingFilter.addEventListener('change', onParkingFilterCheckedChange);
-
-  var onWasherFilterCheckedChange = window.timer.debounce(function () {
-    washerValue = washerFilter.checked ? washerFilter.value : null;
-    toFreshPins();
-  });
-  washerFilter.addEventListener('change', onWasherFilterCheckedChange);
-
-  var onElevatorFilterCheckedChange = window.timer.debounce(function () {
-    elevatorValue = elevatorFilter.checked ? elevatorFilter.value : null;
-    toFreshPins();
-  });
-  elevatorFilter.addEventListener('change', onElevatorFilterCheckedChange);
-
-  var onConditionerFilterCheckedChange = window.timer.debounce(function () {
-    conditionerValue = conditionerFilter.checked ? conditionerFilter.value : null;
-    toFreshPins();
-  });
-  conditionerFilter.addEventListener('change', onConditionerFilterCheckedChange);
+  pinFilter.addEventListener('change', onPinFilterChange);
 
   window.order = {
     removeMapPins: removeMapPins,
     somePins: somePins,
     updatePins: updatePins,
-    pinFilter: pinFilter
+    pinFilter: pinFilter,
+    filterElements: filterElements
   };
 })();

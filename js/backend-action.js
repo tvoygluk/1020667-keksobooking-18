@@ -3,7 +3,7 @@
 (function () {
   var MAIN_PIN_POS_Y = 375;
   var MAIN_PIN_POS_X = 570;
-  var mapFilters = window.order.pinFilter.querySelector('.map__filters');
+  // var mapFilters = window.order.pinFilter.querySelector('.map__filters');
 
   var successEvent = function (data) {
     window.order.somePins = data;
@@ -77,7 +77,7 @@
 
   var makePageDefault = function () {
     window.form.fieldsWrapper.reset();
-    mapFilters.reset();
+    window.order.pinFilter.reset();
     window.form.setMinPrice();
     window.cardRender.closePopup();
     window.order.removeMapPins();
