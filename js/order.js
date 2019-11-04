@@ -70,14 +70,14 @@
     window.pinRender.addPinsToLayout(getFilterData(someFilterPins, window.order.filterElements));
   };
 
-  var toFreshPins = function () {
+  var refreshPins = function () {
     window.cardRender.closePopup();
     window.order.removeMapPins();
     updatePins();
   };
 
   var onPinFilterChange = window.timer.debounce(function () {
-    toFreshPins();
+    refreshPins();
   });
 
   pinFilter.addEventListener('change', onPinFilterChange);

@@ -9,7 +9,7 @@
     window.order.updatePins();
   };
 
-  var addSomethingToLayout = function (something) {
+  var fillLayout = function (something) {
     var fragment = document.createDocumentFragment();
     fragment.appendChild(something);
     document.body.children[0].appendChild(fragment);
@@ -19,7 +19,7 @@
     var successTemplate = document.querySelector('#success').content.querySelector('.success');
     var someSuccess = successTemplate.cloneNode(true);
     var successMessage = someSuccess.querySelector('.success__message');
-    addSomethingToLayout(someSuccess);
+    fillLayout(someSuccess);
 
     var closeSuccess = function () {
       if (someSuccess !== null) {
@@ -49,7 +49,7 @@
     var errorMessage = someError.querySelector('.error__message');
     errorMessage.textContent = message;
 
-    addSomethingToLayout(someError);
+    fillLayout(someError);
 
     var closeErrorButton = function () {
       if (someError !== null) {
