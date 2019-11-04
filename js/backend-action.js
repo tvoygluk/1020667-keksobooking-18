@@ -4,48 +4,9 @@
   var MAIN_PIN_POS_Y = 375;
   var MAIN_PIN_POS_X = 570;
 
-  var removeMapPins = function () {
-    var mapPins = document.querySelectorAll('.map__pin');
-    for (var m = 1; m < mapPins.length; m++) {
-      if (mapPins[m] !== null) {
-        mapPins[m].remove();
-      }
-    }
-  };
-
-  var somePins = [];
-  var housingTypeValue;
-  var pinFilter = document.querySelector('.map__filters-container');
-  var typeFilter = pinFilter.querySelector('#housing-type');
-  var mapFilters = pinFilter.querySelector('.map__filters');
-
-  var updatePins = function () {
-    var someFilterPins = somePins.filter(function (el) {
-      var isHouse = el.offer.type === housingTypeValue;
-      return isHouse;
-    });
-
-
-    var onTypeFilterSelectChange = function () {
-
-      housingTypeValue = typeFilter.value;
-      window.cardRender.closePopup();
-      removeMapPins();
-      updatePins();
-      typeFilter.removeEventListener('change', onTypeFilterSelectChange);
-    };
-
-    typeFilter.addEventListener('change', onTypeFilterSelectChange);
-    var withDoublePin = someFilterPins.concat(somePins);
-    var uniquePins = withDoublePin.filter(function (it, i) {
-      return withDoublePin.indexOf(it) === i;
-    });
-    window.pinRender.addPinsToLayout(uniquePins);
-  };
-
-  var successHandler = function (data) {
-    somePins = data;
-    updatePins();
+  var successEvent = function (data) {
+    window.order.somePins = data;
+    window.order.updatePins();
   };
 
   var addSomethingToLayout = function (something) {
@@ -57,6 +18,7 @@
   var makeSuccessMessage = function () {
     var successTemplate = document.querySelector('#success').content.querySelector('.success');
     var someSuccess = successTemplate.cloneNode(true);
+    var successMessage = someSuccess.querySelector('.success__message');
     addSomethingToLayout(someSuccess);
 
     var closeSuccess = function () {
@@ -65,8 +27,10 @@
       }
     };
 
-    var onSuccessClick = function () {
-      closeSuccess();
+    var onSuccessClick = function (evt) {
+      if (evt.target !== successMessage) {
+        closeSuccess();
+      }
     };
 
     var onEscPress = function (evt) {
@@ -79,7 +43,7 @@
     window.cardRender.bodyField.addEventListener('keydown', onEscPress);
   };
 
-  var errorHandler = function (message) {
+  var errorEvent = function (message) {
     var errorTemplate = document.querySelector('#error').content.querySelector('.error');
     var someError = errorTemplate.cloneNode(true);
     var errorMessage = someError.querySelector('.error__message');
@@ -93,8 +57,10 @@
       }
     };
 
-    var onErrorClick = function () {
-      closeErrorButton();
+    var onErrorClick = function (evt) {
+      if (evt.target !== errorMessage) {
+        closeErrorButton();
+      }
     };
 
     var onEscPress = function (evt) {
@@ -109,17 +75,16 @@
   };
 
   var makePageDefault = function () {
-    window.form.adForm.reset();
-    mapFilters.reset();
+    window.form.fieldsWrapper.reset();
+    window.order.pinFilter.reset();
     window.form.setMinPrice();
-
     window.cardRender.closePopup();
-    removeMapPins();
+    window.order.removeMapPins();
 
     window.pageAction.mapPinMain.style.top = MAIN_PIN_POS_Y + 'px';
     window.pageAction.mapPinMain.style.left = MAIN_PIN_POS_X + 'px';
     window.pageAction.toggleDisabled();
-    window.form.adForm.classList.add('ad-form--disabled');
+    window.form.fieldsWrapper.classList.add('ad-form--disabled');
     window.cardRender.map.classList.add('map--faded');
     window.pageAction.setAddressValue(window.pageAction.mapPinMain);
     window.pageAction.mapPinMain.addEventListener('mousedown', window.pageAction.onMainPinMouseDown);
@@ -131,15 +96,15 @@
     makeSuccessMessage();
   };
 
-  var onSubmitForm = function (evt) {
-    window.backend.save(sendData, errorHandler, new FormData(window.form.adForm));
+  var onFormSubmit = function (evt) {
+    window.backend.save(sendData, errorEvent, new FormData(window.form.fieldsWrapper));
     evt.preventDefault();
   };
 
   window.backendAction = {
-    successHandler: successHandler,
-    errorHandler: errorHandler,
-    onSubmitForm: onSubmitForm,
+    successEvent: successEvent,
+    errorEvent: errorEvent,
+    onFormSubmit: onFormSubmit,
     makePageDefault: makePageDefault
   };
 })();
