@@ -39,11 +39,11 @@
       return String(data.offer.guests) === filter.value;
     },
     'housing-features': function (data, filter) {
-      var filterChecked = Array.from(filter.querySelectorAll('input[type=checkbox]:checked'));
+      var filtersChecked = Array.from(filter.querySelectorAll('input[type=checkbox]:checked'));
 
-      return filterChecked.every(function (myObject) {
+      return filtersChecked.every(function (inputChecked) {
         return data.offer.features.some(function (feature) {
-          return feature === myObject.value;
+          return feature === inputChecked.value;
         });
       });
     }
@@ -64,10 +64,13 @@
   var filterElements = [];
 
   var updatePins = function () {
-    var someFilterPins = window.order.somePins;
+    var originalData = window.order.somePins;
     window.order.filterElements = Array.from(window.order.pinFilter.children);
-
-    window.pinRender.addPinsToLayout(getFilterData(someFilterPins, window.order.filterElements));
+    var subtotalData = getFilterData(window.order.somePins, window.order.filterElements).concat(originalData);
+    var filteredData = subtotalData.filter(function (item, i) {
+      return subtotalData.indexOf(item) === i;
+    });
+    window.pinRender.addPinsToLayout(filteredData);
   };
 
   var refreshPins = function () {
