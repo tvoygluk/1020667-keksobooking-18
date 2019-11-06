@@ -9,7 +9,7 @@
     halfWidth: window.pageAction.mapPinMain.offsetWidth / 2
   };
 
-  var calcConditionFun = function () {
+  var calcCondition = function () {
     var mapPinMainXCenter = parseInt(window.pageAction.mapPinMain.style.left, 10) + window.pageAction.mapPinMain.offsetWidth / 2;
     var mapPinMainYTop = parseInt(window.pageAction.mapPinMain.style.top, 10);
     var mapPinMainYBottom = mapPinMainYTop + window.pageAction.mapPinMain.offsetHeight + window.pageAction.MAIN_PIN_EXTRA_HEIGHT;
@@ -55,14 +55,14 @@
       window.pageAction.mapPinMain.style.left = (window.pageAction.mapPinMain.offsetLeft - shift.x) + 'px';
 
       window.pageAction.setAddressValue(window.pageAction.mapPinMain);
-      calcConditionFun();
+      calcCondition();
     };
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-      calcConditionFun();
+      calcCondition();
       window.pageAction.setAddressValue();
     };
     document.addEventListener('mousemove', onMouseMove);

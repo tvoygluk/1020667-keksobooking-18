@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var INITIAL_PINS = 5;
+
   var removeMapPins = function () {
     var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     mapPins.forEach(function (element) {
@@ -39,17 +41,15 @@
       return String(data.offer.guests) === filter.value;
     },
     'housing-features': function (data, filter) {
-      var filterChecked = Array.from(filter.querySelectorAll('input[type=checkbox]:checked'));
+      var filtersChecked = Array.from(filter.querySelectorAll('input[type=checkbox]:checked'));
 
-      return filterChecked.every(function (myObject) {
+      return filtersChecked.every(function (inputChecked) {
         return data.offer.features.some(function (feature) {
-          return feature === myObject.value;
+          return feature === inputChecked.value;
         });
       });
     }
   };
-
-  var somePins = [];
 
   var pinFilter = window.cardRender.map.querySelector('.map__filters');
 
@@ -61,32 +61,30 @@
     });
   };
 
-  var filterElements = [];
-
   var updatePins = function () {
-    var someFilterPins = window.order.somePins;
-    window.order.filterElements = Array.from(window.order.pinFilter.children);
+    var filterElements = Array.from(window.cardRender.map.querySelector('.map__filters').children);
 
-    window.pinRender.addPinsToLayout(getFilterData(someFilterPins, window.order.filterElements));
+    var filteredData = getFilterData(window.backendAction.pins().slice(), filterElements).slice(0, INITIAL_PINS);
+
+    window.pinRender.addPinsToLayout(filteredData);
   };
 
-  var toFreshPins = function () {
+  var refreshPins = function () {
     window.cardRender.closePopup();
     window.order.removeMapPins();
     updatePins();
   };
 
   var onPinFilterChange = window.timer.debounce(function () {
-    toFreshPins();
+    refreshPins();
   });
 
   pinFilter.addEventListener('change', onPinFilterChange);
 
   window.order = {
+    INITIAL_PINS: INITIAL_PINS,
     removeMapPins: removeMapPins,
-    somePins: somePins,
     updatePins: updatePins,
-    pinFilter: pinFilter,
-    filterElements: filterElements
+    pinFilter: pinFilter
   };
 })();
