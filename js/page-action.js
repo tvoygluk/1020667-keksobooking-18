@@ -37,7 +37,15 @@
     toggleDisabled();
     window.form.fieldsWrapper.classList.remove('ad-form--disabled');
     window.cardRender.map.classList.remove('map--faded');
-    window.backend.load(window.backendAction.successEvent, window.backendAction.errorEvent);
+
+    // ============= TODO: убрать на сдаче ===============
+    if (window.backendAction.pins().length === 0) {
+      window.backend.load(window.backendAction.successEvent, window.backendAction.errorEvent); // исходная строка
+    } else {
+      window.pinRender.addPinsToLayout(window.backendAction.pins().slice(0, window.order.INITIAL_PINS));
+    }
+    // ===================================================
+
     setAddressValue();
     window.form.onRoomNumberSelectChange();
     window.form.onTypeSelectChange();

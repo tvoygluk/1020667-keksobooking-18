@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var INITIAL_PINS = 5;
+
   var removeMapPins = function () {
     var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     mapPins.forEach(function (element) {
@@ -49,8 +51,6 @@
     }
   };
 
-  var somePins = [];
-
   var pinFilter = window.cardRender.map.querySelector('.map__filters');
 
   var getFilterData = function (data, elements) {
@@ -61,15 +61,11 @@
     });
   };
 
-  var filterElements = [];
-
   var updatePins = function () {
-    var originalData = window.order.somePins;
-    window.order.filterElements = Array.from(window.order.pinFilter.children);
-    var subtotalData = getFilterData(window.order.somePins, window.order.filterElements).concat(originalData);
-    var filteredData = subtotalData.filter(function (item, i) {
-      return subtotalData.indexOf(item) === i;
-    });
+    var filterElements = Array.from(window.cardRender.map.querySelector('.map__filters').children);
+
+    var filteredData = getFilterData(window.backendAction.pins().slice(), filterElements).slice(0, INITIAL_PINS);
+
     window.pinRender.addPinsToLayout(filteredData);
   };
 
@@ -86,10 +82,9 @@
   pinFilter.addEventListener('change', onPinFilterChange);
 
   window.order = {
+    INITIAL_PINS: INITIAL_PINS,
     removeMapPins: removeMapPins,
-    somePins: somePins,
     updatePins: updatePins,
-    pinFilter: pinFilter,
-    filterElements: filterElements
+    pinFilter: pinFilter
   };
 })();

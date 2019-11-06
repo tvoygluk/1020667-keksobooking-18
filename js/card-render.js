@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var ESC_KEYCODE = 27;
   var TYPES = {
     'palace': {
       ru: 'Дворец',
@@ -19,7 +20,7 @@
       min: '0'
     }
   };
-  var ESC_KEYCODE = 27;
+
   var getRightCase = function (inputNumber, firstCase, secondCase, thirdCase) {
 
     if (inputNumber > 10 && (Math.round((inputNumber % 100) / 10) === 1)) {
