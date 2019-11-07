@@ -33,23 +33,33 @@
   window.pageAction.mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
+    var Coordinate = function (x, y) {
+      this.x = x;
+      this.y = y;
     };
+
+    Coordinate.prototype.setX = function (x) {
+      this.x = x;
+    };
+
+    Coordinate.prototype.setY = function (y) {
+      this.y = y;
+    };
+
+    var a = evt.clientX;
+    var b = evt.clientY;
+
+    var startCoords = new Coordinate(a, b);
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
+      var c = startCoords.x - moveEvt.clientX;
+      var d = startCoords.y - moveEvt.clientY;
+      var shift = new Coordinate(c, d);
 
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
+      startCoords.setX(moveEvt.clientX);
+      startCoords.setY(moveEvt.clientY);
 
       window.pageAction.mapPinMain.style.top = (window.pageAction.mapPinMain.offsetTop - shift.y) + 'px';
       window.pageAction.mapPinMain.style.left = (window.pageAction.mapPinMain.offsetLeft - shift.x) + 'px';

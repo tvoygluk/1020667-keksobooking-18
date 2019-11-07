@@ -84,6 +84,14 @@
     window.cardRender.closePopup();
     window.order.removeMapPins();
 
+    window.photo.avatar.src = 'img/muffin-grey.svg';
+    var removeEl = window.photo.photoContainer.querySelectorAll('.ad-form__photo');
+    removeEl.forEach(function (item, i) {
+      if (i !== 0) {
+        item.parentNode.removeChild(item);
+      }
+    });
+
     window.pageAction.mapPinMain.style.top = MAIN_PIN_POS_Y + 'px';
     window.pageAction.mapPinMain.style.left = MAIN_PIN_POS_X + 'px';
     window.pageAction.toggleDisabled();
