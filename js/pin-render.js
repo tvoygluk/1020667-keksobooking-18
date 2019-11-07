@@ -6,21 +6,21 @@
   var ENTER_KEYCODE = 13;
 
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-  var similarListElement = window.cardRender.map.querySelector('.map__pins');
+  var similar = window.cardRender.map.querySelector('.map__pins');
 
   var renderPin = function (pin) {
     if (pin.offer) {
-      var pinElement = pinTemplate.cloneNode(true);
+      var pinClone = pinTemplate.cloneNode(true);
 
-      pinElement.style = 'left: ' + (pin.location.x - (PIN_WIDTH / 2)) + 'px; top: ' + (pin.location.y - PIN_HEIGHT) + 'px;';
-      pinElement.querySelector('.map__pin img').src = pin.author.avatar;
-      pinElement.querySelector('.map__pin img').alt = pin.offer.title;
-      pinElement.tabIndex = 0;
+      pinClone.style = 'left: ' + (pin.location.x - (PIN_WIDTH / 2)) + 'px; top: ' + (pin.location.y - PIN_HEIGHT) + 'px;';
+      pinClone.querySelector('.map__pin img').src = pin.author.avatar;
+      pinClone.querySelector('.map__pin img').alt = pin.offer.title;
+      pinClone.tabIndex = 0;
 
       var workCard = function () {
         window.cardRender.closePopup();
         window.cardRender.map.appendChild(window.cardRender.renderCard(pin));
-        pinElement.classList.add('map__pin--active');
+        pinClone.classList.add('map__pin--active');
       };
       var onPinClick = function () {
         workCard();
@@ -30,11 +30,11 @@
           workCard();
         }
       };
-      pinElement.addEventListener('click', onPinClick);
-      pinElement.addEventListener('keydown', onPinKeyDown);
+      pinClone.addEventListener('click', onPinClick);
+      pinClone.addEventListener('keydown', onPinKeyDown);
 
     }
-    return pinElement;
+    return pinClone;
   };
 
   var addPinsToLayout = function (pins) {
@@ -44,7 +44,7 @@
       fragment.appendChild(renderPin(item));
     });
 
-    similarListElement.appendChild(fragment);
+    similar.appendChild(fragment);
   };
 
   window.pinRender = {

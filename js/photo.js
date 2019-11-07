@@ -35,19 +35,18 @@
 
   var photoDiv = window.form.fieldsWrapper.querySelector('.ad-form__photo');
 
-  var photoElImg = document.createElement('img');
-
+  var photoImg = document.createElement('img');
 
   var onBottomChooserChange = function () {
-    photoElImg.src = '';
-    photoElImg.style = 'width: 100%; height: auto;';
-    photoElImg.alt = 'Фото жилья';
-    photoDiv.appendChild(photoElImg);
-    var photoEl = photoDiv.cloneNode(true);
-    photoContainer.appendChild(photoEl);
-    var myContainer = photoContainer.querySelectorAll('.ad-form__photo img');
-    writeFile(bottomChooser, myContainer[myContainer.length - 1]);
-    myContainer[0].parentNode.removeChild(myContainer[0]);
+    photoImg.src = '';
+    photoImg.style = 'width: 100%; height: auto;';
+    photoImg.alt = 'Фото жилья';
+    photoDiv.appendChild(photoImg);
+    var photoClone = photoDiv.cloneNode(true);
+    photoContainer.appendChild(photoClone);
+    var containers = photoContainer.querySelectorAll('.ad-form__photo img');
+    writeFile(bottomChooser, containers[containers.length - 1]);
+    containers[0].parentNode.removeChild(containers[0]);
   };
 
   bottomChooser.addEventListener('change', onBottomChooserChange);

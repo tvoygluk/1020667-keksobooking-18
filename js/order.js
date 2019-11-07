@@ -3,11 +3,11 @@
 (function () {
   var INITIAL_PINS = 5;
 
-  var removeMapPins = function () {
+  var removePins = function () {
     var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    mapPins.forEach(function (element) {
-      if (element !== null) {
-        element.remove();
+    mapPins.forEach(function (item) {
+      if (item !== null) {
+        item.remove();
       }
     });
   };
@@ -71,7 +71,7 @@
 
   var refreshPins = function () {
     window.cardRender.closePopup();
-    window.order.removeMapPins();
+    removePins();
     updatePins();
   };
 
@@ -83,7 +83,7 @@
 
   window.order = {
     INITIAL_PINS: INITIAL_PINS,
-    removeMapPins: removeMapPins,
+    removePins: removePins,
     updatePins: updatePins,
     pinFilter: pinFilter
   };

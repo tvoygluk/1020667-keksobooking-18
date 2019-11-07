@@ -123,8 +123,8 @@
         bodyField.removeEventListener('keydown', onPopupEscPress);
       }
     };
-    var closePopupElement = card.querySelector('.popup__close');
-    closePopupElement.addEventListener('click', onClosePopupClick);
+    var closeCard = card.querySelector('.popup__close');
+    closeCard.addEventListener('click', onClosePopupClick);
     bodyField.addEventListener('keydown', onPopupEscPress);
 
     return card;
