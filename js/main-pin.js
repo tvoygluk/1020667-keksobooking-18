@@ -38,6 +38,14 @@
       this.y = y;
     };
 
+    Coordinate.prototype.setX = function (x) {
+      this.x = x;
+    };
+
+    Coordinate.prototype.setY = function (y) {
+      this.y = y;
+    };
+
     var a = evt.clientX;
     var b = evt.clientY;
 
@@ -50,8 +58,8 @@
       var d = startCoords.y - moveEvt.clientY;
       var shift = new Coordinate(c, d);
 
-      startCoords.x = moveEvt.clientX;
-      startCoords.y = moveEvt.clientY;
+      startCoords.setX(moveEvt.clientX);
+      startCoords.setY(moveEvt.clientY);
 
       window.pageAction.mapPinMain.style.top = (window.pageAction.mapPinMain.offsetTop - shift.y) + 'px';
       window.pageAction.mapPinMain.style.left = (window.pageAction.mapPinMain.offsetLeft - shift.x) + 'px';
