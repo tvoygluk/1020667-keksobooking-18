@@ -49,7 +49,7 @@
     }
   };
 
-  var renderCard = function (pin) {
+  var addCardToLayout = function (pin) {
     var card = cardTemplate.cloneNode(true);
 
     var popupTitle = card.querySelector('.popup__title');
@@ -134,7 +134,7 @@
     TYPES: TYPES,
     ESC_KEYCODE: ESC_KEYCODE,
     map: map,
-    renderCard: renderCard,
+    addCardToLayout: addCardToLayout,
     closePopup: closePopup,
     bodyField: bodyField
   };

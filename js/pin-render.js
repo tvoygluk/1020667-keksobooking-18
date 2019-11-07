@@ -19,7 +19,7 @@
 
       var workCard = function () {
         window.cardRender.closePopup();
-        window.cardRender.map.appendChild(window.cardRender.renderCard(pin));
+        window.cardRender.map.appendChild(window.cardRender.addCardToLayout(pin));
         pinClone.classList.add('map__pin--active');
       };
       var onPinClick = function () {

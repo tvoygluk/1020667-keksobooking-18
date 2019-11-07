@@ -31,7 +31,7 @@
 
   var bottomChooser = window.form.fieldsWrapper.querySelector('.ad-form__input');
 
-  var photoContainer = window.form.fieldsWrapper.querySelector('.ad-form__photo-container');
+  var containerImg = window.form.fieldsWrapper.querySelector('.ad-form__photo-container');
 
   var photoDiv = window.form.fieldsWrapper.querySelector('.ad-form__photo');
 
@@ -43,8 +43,8 @@
     photoImg.alt = 'Фото жилья';
     photoDiv.appendChild(photoImg);
     var photoClone = photoDiv.cloneNode(true);
-    photoContainer.appendChild(photoClone);
-    var containers = photoContainer.querySelectorAll('.ad-form__photo img');
+    containerImg.appendChild(photoClone);
+    var containers = containerImg.querySelectorAll('.ad-form__photo img');
     writeFile(bottomChooser, containers[containers.length - 1]);
     containers[0].parentNode.removeChild(containers[0]);
   };
@@ -53,6 +53,6 @@
 
   window.photo = {
     avatar: avatar,
-    photoContainer: photoContainer
+    containerImg: containerImg
   };
 })();
