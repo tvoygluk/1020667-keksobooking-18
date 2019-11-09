@@ -40,7 +40,6 @@
   var onBottomChooserChange = function () {
     photoImg.src = '';
     photoImg.style = 'width: 100%; height: auto;';
-    photoImg.alt = 'Фото жилья';
     photoDiv.appendChild(photoImg);
     var photoClone = photoDiv.cloneNode(true);
     containerImg.appendChild(photoClone);

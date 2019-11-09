@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var CARD_PHOTO_WIDTH = 45;
+  var CARD_PHOTO_HEIGHT = 40;
   var ESC_KEYCODE = 27;
   var TYPES = {
     'palace': {
@@ -102,8 +104,8 @@
         var cardPhoto = document.createElement('img');
         cardPhoto.src = element;
         cardPhoto.className = ('popup__photo');
-        cardPhoto.width = 45;
-        cardPhoto.height = 40;
+        cardPhoto.width = CARD_PHOTO_WIDTH;
+        cardPhoto.height = CARD_PHOTO_HEIGHT;
         cardPhoto.alt = 'Фотография жилья';
         popupPhotos.appendChild(cardPhoto);
       });
