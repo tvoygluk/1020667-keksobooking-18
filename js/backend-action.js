@@ -8,7 +8,6 @@
 
   var successEvent = function (data) {
     pins = data.slice();
-
     window.pinRender.addPinsToLayout(pins.slice(0, window.order.INITIAL_PINS));
   };
 
@@ -82,11 +81,11 @@
     window.order.pinFilter.reset();
     window.form.setMinPrice();
     window.cardRender.closePopup();
-    window.order.removeMapPins();
+    window.order.removePins();
 
     window.photo.avatar.src = 'img/muffin-grey.svg';
-    var removeEl = window.photo.photoContainer.querySelectorAll('.ad-form__photo');
-    removeEl.forEach(function (item, i) {
+    var photoContainers = window.photo.containerImg.querySelectorAll('.ad-form__photo');
+    photoContainers.forEach(function (item, i) {
       if (i !== 0) {
         item.parentNode.removeChild(item);
       }

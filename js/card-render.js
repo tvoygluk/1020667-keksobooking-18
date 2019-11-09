@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var CARD_PHOTO_WIDTH = 45;
+  var CARD_PHOTO_HEIGHT = 40;
   var ESC_KEYCODE = 27;
   var TYPES = {
     'palace': {
@@ -49,7 +51,7 @@
     }
   };
 
-  var renderCard = function (pin) {
+  var addCardToLayout = function (pin) {
     var card = cardTemplate.cloneNode(true);
 
     var popupTitle = card.querySelector('.popup__title');
@@ -102,8 +104,8 @@
         var cardPhoto = document.createElement('img');
         cardPhoto.src = element;
         cardPhoto.className = ('popup__photo');
-        cardPhoto.width = 45;
-        cardPhoto.height = 40;
+        cardPhoto.width = CARD_PHOTO_WIDTH;
+        cardPhoto.height = CARD_PHOTO_HEIGHT;
         cardPhoto.alt = 'Фотография жилья';
         popupPhotos.appendChild(cardPhoto);
       });
@@ -123,8 +125,8 @@
         bodyField.removeEventListener('keydown', onPopupEscPress);
       }
     };
-    var closePopupElement = card.querySelector('.popup__close');
-    closePopupElement.addEventListener('click', onClosePopupClick);
+    var closeCard = card.querySelector('.popup__close');
+    closeCard.addEventListener('click', onClosePopupClick);
     bodyField.addEventListener('keydown', onPopupEscPress);
 
     return card;
@@ -134,7 +136,7 @@
     TYPES: TYPES,
     ESC_KEYCODE: ESC_KEYCODE,
     map: map,
-    renderCard: renderCard,
+    addCardToLayout: addCardToLayout,
     closePopup: closePopup,
     bodyField: bodyField
   };

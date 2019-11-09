@@ -46,17 +46,17 @@
       this.y = y;
     };
 
-    var a = evt.clientX;
-    var b = evt.clientY;
+    var startX = evt.clientX;
+    var startY = evt.clientY;
 
-    var startCoords = new Coordinate(a, b);
+    var startCoords = new Coordinate(startX, startY);
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
-      var c = startCoords.x - moveEvt.clientX;
-      var d = startCoords.y - moveEvt.clientY;
-      var shift = new Coordinate(c, d);
+      var moveX = startCoords.x - moveEvt.clientX;
+      var moveY = startCoords.y - moveEvt.clientY;
+      var shift = new Coordinate(moveX, moveY);
 
       startCoords.setX(moveEvt.clientX);
       startCoords.setY(moveEvt.clientY);
