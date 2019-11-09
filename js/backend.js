@@ -40,8 +40,6 @@
   var save = requestVers(REQUEST_TYPE_POST, URL_SAVE);
 
   window.backend = {
-    REQUEST_TYPE_GET: REQUEST_TYPE_GET,
-    REQUEST_TYPE_POST: REQUEST_TYPE_POST,
     URL_LOAD: URL_LOAD,
     URL_SAVE: URL_SAVE,
     load: load,

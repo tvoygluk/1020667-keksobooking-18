@@ -15,10 +15,10 @@
   toggleDisabled();
 
   var setAddressValue = function (element) {
-    var myElement = element || mapPinMain;
-    var mapPinMainXCenter = Math.floor(parseInt(myElement.style.left, 10) + myElement.offsetWidth / 2);
-    var mapPinMainYTop = parseInt(myElement.style.top, 10);
-    addressField.value = (window.cardRender.map.classList.contains('map--faded')) ? mapPinMainXCenter + ', ' + Math.floor(mapPinMainYTop + myElement.offsetHeight / 2) : mapPinMainXCenter + ', ' + Math.floor(mapPinMainYTop + myElement.offsetHeight + MAIN_PIN_EXTRA_HEIGHT);
+    var blockPin = element || mapPinMain;
+    var mapPinMainXCenter = Math.floor(parseInt(blockPin.style.left, 10) + blockPin.offsetWidth / 2);
+    var mapPinMainYTop = parseInt(blockPin.style.top, 10);
+    addressField.value = (window.cardRender.map.classList.contains('map--faded')) ? mapPinMainXCenter + ', ' + Math.floor(mapPinMainYTop + blockPin.offsetHeight / 2) : mapPinMainXCenter + ', ' + Math.floor(mapPinMainYTop + blockPin.offsetHeight + MAIN_PIN_EXTRA_HEIGHT);
   };
 
   setAddressValue();
@@ -38,13 +38,11 @@
     window.form.fieldsWrapper.classList.remove('ad-form--disabled');
     window.cardRender.map.classList.remove('map--faded');
 
-    // ============= TODO: убрать на сдаче ===============
     if (window.backendAction.pins().length === 0) {
-      window.backend.load(window.backendAction.successEvent, window.backendAction.errorEvent); // исходная строка
+      window.backend.load(window.backendAction.successEvent, window.backendAction.errorEvent);
     } else {
       window.pinRender.addPinsToLayout(window.backendAction.pins().slice(0, window.order.INITIAL_PINS));
     }
-    // ===================================================
 
     setAddressValue();
     window.form.onRoomNumberSelectChange();
