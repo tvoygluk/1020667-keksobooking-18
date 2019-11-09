@@ -4,6 +4,7 @@
   var CARD_PHOTO_WIDTH = 45;
   var CARD_PHOTO_HEIGHT = 40;
   var ESC_KEYCODE = 27;
+  var BASE_TEN = 10;
   var TYPES = {
     'palace': {
       ru: 'Дворец',
@@ -23,12 +24,13 @@
     }
   };
 
+  // getRightCase - функция склонения существительных после числительных, которая на вход принимает число и три варианта склонения, а на выходе возвращает нужный вариант
   var getRightCase = function (inputNumber, firstCase, secondCase, thirdCase) {
 
-    if (inputNumber > 10 && (Math.round((inputNumber % 100) / 10) === 1)) {
+    if (inputNumber > BASE_TEN && (Math.round((inputNumber % 100) / BASE_TEN) === 1)) {
       return thirdCase;
     } else {
-      switch (inputNumber % 10) {
+      switch (inputNumber % BASE_TEN) {
         case 1: return firstCase;
         case 2:
         case 3:
